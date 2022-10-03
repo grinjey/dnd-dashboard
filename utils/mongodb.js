@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = "mongodb+srv://seth:1234@dnd-dashboard.mqqctgu.mongodb.net/?retryWrites=true&w=majority";
 const MONGODB_DB = process.env.DB_NAME;
 
 // check the MongoDB URI
