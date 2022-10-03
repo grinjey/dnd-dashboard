@@ -65,7 +65,7 @@ export const PlayerDashboard = () => {
     };
 
     return (
-        <Card border="success" className="table-wrapper table-responsive shadow-sm">
+        <Card border="light" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
             <Card.Title className="fw-bold text-start ps-3 py-2">
                 <PlayerDashboardTitle 
                     setName={setName}

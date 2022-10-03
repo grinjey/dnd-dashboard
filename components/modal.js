@@ -37,7 +37,7 @@ export function FormModalContainer({triggerText, form, formId}) {
 const TriggerButton = ({triggerText, showModal}) => {
 
     return (
-        <Button variant="light" size="sm" onClick={showModal}> {triggerText} </Button>
+        <Button variant="dark" size="sm" onClick={showModal}> {triggerText} </Button>
     );
 
 };

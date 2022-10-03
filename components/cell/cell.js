@@ -10,7 +10,7 @@ export class Cell extends React.Component {
         const { value, onChange} = this.props; 
         
         return this.state.editing ?
-            <input type="text" onChange={(e) => onChange(e.target.value)} onBlur={() => this.onBlur()} /> : 
+            <input className="bg-secondary text-black fw-bold" type="text" onChange={(e) => onChange(e.target.value)} onBlur={() => this.onBlur()} /> : 
             <div onClick={() => this.onFocus()}>{value ? value : '-'}</div>
     }
 

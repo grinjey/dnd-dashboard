@@ -11,7 +11,7 @@ const FightSelectDropdown = ({fights, selectFight}) => {
         <DropdownButton
         title="Select Fight"
         id="dropdown-menu-align-right"
-        variant='light'
+        variant='dark'
         size='sm'
         onSelect={handleSelect}
         >

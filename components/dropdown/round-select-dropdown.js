@@ -21,7 +21,7 @@ const RoundSelectDropdown = ({fight, setRound}) => {
         <DropdownButton
         title="Select Round"
         id="dropdown-menu-align-right"
-        variant='light'
+        variant='dark'
         size='sm'
         onSelect={handleSelect}
         >

@@ -4,11 +4,11 @@ import { PlayerDashboard } from "../components/dashboard/player-dashboard.js";
 function App() {
 
     return (
-        <>
+        <div style={{backgroundColor : 'black', height : "100vh"}}>
         <div className="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
             <div className="mb-4 mb-lg-0 ps-5">
-                <h4>Character List</h4>
-                <p className="mb-0">Your DnD characters.</p>
+                <h4 className="text-white">Character List</h4>
+                <p className="mb-0 text-white-50">Your DnD characters.</p>
             </div>
         </div>
 
@@ -17,7 +17,7 @@ function App() {
         </Container>
         
         
-        </>
+        </div>
     );
 
 }

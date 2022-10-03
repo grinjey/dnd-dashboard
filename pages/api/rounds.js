@@ -65,15 +65,11 @@ async function getRounds(req,res){
             {fight_id: req.query.fight_id},
             {round_id: round_id}
         ];
-        
-        console.log(query);
 
         let rounds = await db
             .collection('rounds')
             .find({$and: query})
             .toArray();
-        
-        console.log(rounds);
 
         // return the posts
         return res.json({

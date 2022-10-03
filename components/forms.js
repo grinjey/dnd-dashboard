@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 export const PlayerAddForm = ({handleSubmit, setName, setPlayerClass, formId}) => {
 
     return (
-        <Form onSubmit={(e) => handleSubmit(e)} id={formId}>
+        <Form onSubmit={(e) => handleSubmit(e)} id={formId} >
             <Form.Group 
             className="mb-3" 
             controlId="name">
