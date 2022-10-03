@@ -14,7 +14,7 @@ export default function PlayerNavDropdown({addModal, removeModal}) {
                 bg="dark"
                 id="nav-dropdown-dark-example"
                 title="Add/Remove"
-                menuVariant="light"
+                menuVariant="dark"
                 >
                 <div className='d-flex justify-content-center pb-2'>{addModal}</div>
                 <div className='d-flex justify-content-center'>{removeModal}</div>

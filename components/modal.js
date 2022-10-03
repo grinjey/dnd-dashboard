@@ -18,14 +18,14 @@ export function FormModalContainer({triggerText, form, formId}) {
             <>
             <TriggerButton showModal={showModal} triggerText={triggerText}></TriggerButton>
             <Modal show={show} onHide={closeModal}>
-                <Modal.Header closeButton>
-                <Modal.Title>{triggerText}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <Modal.Header className="bg-dark" closeButton>
+                <Modal.Title className="bg-dark text-white-50">{triggerText}</Modal.Title>
+                </Modal.Header >
+                <Modal.Body className="bg-dark">
                 {form}
                 </Modal.Body>
-                <Modal.Footer>
-                <Button variant="primary" type="submit" form={formId} onClick={closeModal}>
+                <Modal.Footer className="bg-dark">
+                <Button variant="secondary" type="submit" form={formId} onClick={closeModal}>
                     Save Changes
                 </Button>
                 </Modal.Footer>
