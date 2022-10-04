@@ -26,6 +26,7 @@ async function getChars(req,res){
     try {
         // connect to the database
         let { db } = await connectToDatabase();
+
         // fetch the posts
         let chars = await db
             .collection('chars')

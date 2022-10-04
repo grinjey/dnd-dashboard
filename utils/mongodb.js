@@ -13,36 +13,33 @@ if (!MONGODB_DB) {
     throw new Error('Define the MONGODB_DB environmental variable');
 }
 
-let cachedClient = null;
-let cachedDb = null;
+const options = {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+};
+
+let mongoClient = null;
+let db = null;
+
 
 export async function connectToDatabase() {
-    // check the cached.
-    if (cachedClient && cachedDb) {
-        // load from cache
-        return {
-            client: cachedClient,
-            db: cachedDb,
-        };
+    try {
+        if (mongoClient && db) {
+            return { mongoClient, db };
+        }
+        if (process.env.NODE_ENV === "development") {
+            if (!global._mongoClient) {
+                mongoClient = await (new MongoClient(MONGODB_URI, options)).connect();
+                global._mongoClient = mongoClient;
+            } else {
+                mongoClient = global._mongoClient;
+            }
+        } else {
+            mongoClient = await (new MongoClient(MONGODB_URI, options)).connect();
+        }
+        db = await mongoClient.db(MONGODB_DB);
+        return { mongoClient, db };
+    } catch (e) {
+        console.error(e);
     }
-
-    // set the connection options
-    const opts = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    };
-
-    // Connect to cluster
-    let client = new MongoClient(MONGODB_URI, opts);
-    await client.connect();
-    let db = client.db(MONGODB_DB);
-
-    // set cache
-    cachedClient = client;
-    cachedDb = db;
-
-    return {
-        client: cachedClient,
-        db: cachedDb,
-    };
 }
