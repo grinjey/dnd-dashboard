@@ -1,11 +1,26 @@
 import axios from 'axios';
 
-export async function getRounds(fight_id, round_id) {
+// export async function getRounds(fight_id, round_id) {
+    
+//     try {
+//         console.log(`fetching round ${round_id} for fight ${fight_id} info.`)
+//         const response = await axios
+//             .get('/api/rounds', {params: {fight_id: fight_id, round_id: round_id}})
+//         console.log(response);
+//         return response.data;
+//     } 
+//     catch (error) {
+//         console.error(`fetching round ${round_id} for fight ${fight_id} info.: ${error}`)
+//     }
+
+// };
+
+export async function getRounds() {
     
     try {
-        console.log(`fetching round ${round_id} for fight ${fight_id} info.`)
+        console.log(`fetching rounds.`)
         const response = await axios
-            .get('/api/rounds', {params: {fight_id: fight_id, round_id: round_id}})
+            .get('/api/rounds')
         console.log(response);
         return response.data;
     } 

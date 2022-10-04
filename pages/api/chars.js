@@ -1,5 +1,6 @@
 const { connectToDatabase } = require('../../utils/mongodb');
 const ObjectId = require('mongodb').ObjectId;
+const { fetchAllChars } = require("../../utils/db-requests/char-requests")
 
 export default async function handler(req, res) {
     // switch the methods
@@ -22,16 +23,11 @@ export default async function handler(req, res) {
     }
 }
 
-async function getChars(req,res){
+async function getChars(req, res){
     try {
-        // connect to the database
-        let { db } = await connectToDatabase();
+        
+        const chars = await fetchAllChars();
 
-        // fetch the posts
-        let chars = await db
-            .collection('chars')
-            .find({})
-            .toArray();
         // return the posts
         return res.json({
             data: JSON.parse(JSON.stringify(chars)),
@@ -50,9 +46,7 @@ async function addChar(req, res) {
     try {
         // connect to the database
         let { db } = await connectToDatabase();
-        console.log(req.body);
         // add the post
-        // await db.collection('chars').insertOne(req.body);
         await db.collection('chars').update(req.body, {$setOnInsert: {name: req.body.name, playerclass: req.body.playerclass}}, {upsert: true});
         // return a message
         return res.json({
@@ -73,10 +67,16 @@ async function deleteChar(req, res) {
         // Connecting to the database
         let { db } = await connectToDatabase();
 
-        // Deleting the post
+        // Deleting the char
         await db.collection('chars').deleteOne({
             _id: new ObjectId(req.body._id)
         });
+
+
+        // Deleting the char rounds
+        await db.collection('rounds').deleteMany(
+            {char_id: req.body._id}
+        );
 
         // // returning a message
         return res.json({

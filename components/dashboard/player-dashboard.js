@@ -1,20 +1,42 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import Card from "react-bootstrap/Card";
 import PlayerDashboardTitle from "../title/player-dasboard-title";
 import PlayerTable from "../tables/player-table";
+import { PlayerStatTable } from "../tables/player-stat-table";
 import { charCreate, getCharsAll, charRemove } from "../../api/chars-api";
+import { getRounds } from "../../api/rounds-api";
+import { Stack } from "react-bootstrap";
 
 
-export const PlayerDashboard = () => {
+export const PlayerDashboard = ({loadedChars, loadedRounds}) => {
 
     const [chars, setChars] = useState([]);
     const [name, setName] = useState('');
+    const [rounds, setRounds] = useState([]);
     const [playerclass, setPlayerClass] = useState('');
 
     useEffect(() => {
-        fetchChars();
+        setChars(loadedChars)
+        setRounds(loadedRounds);
     }, []
     );
+
+    const fetchRounds = async () => {
+        const roundsInfo = await getRounds();
+        setRounds(roundsInfo.data);
+    }
+
+    useEffect(() => {
+        
+        const fetchRoundsSingle = async () => {
+            const roundsInfo = await getRounds();
+            setRounds(roundsInfo.data);
+        }
+
+        fetchRoundsSingle();
+
+    }, [chars]
+    )
 
     const fetchChars = async () => {
         console.log("fetching chars")
@@ -65,18 +87,32 @@ export const PlayerDashboard = () => {
     };
 
     return (
-        <Card border="light" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
-            <Card.Title className="fw-bold text-start ps-3 py-2">
-                <PlayerDashboardTitle 
-                    setName={setName}
-                    setPlayerClass={setPlayerClass}
-                    handleCharSubmit={handleCharSubmit}
-                    handleCharRemoveSubmit={handleCharRemoveSubmit}/>
-            </Card.Title>
-            <Card.Body>
-                <PlayerTable chars={chars}/>
-            </Card.Body>
-        </Card>
+            <Stack gap={3} direction="horizontal" className="d-flex justify-content-center">
+                <Card border="" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
+                <Card.Title className="fw-bold text-start ps-3 py-2">
+                    <PlayerDashboardTitle 
+                        setName={setName}
+                        setPlayerClass={setPlayerClass}
+                        handleCharSubmit={handleCharSubmit}
+                        handleCharRemoveSubmit={handleCharRemoveSubmit}/>
+                </Card.Title>
+                <Card.Body>
+                    {chars !== undefined ? <PlayerTable chars={chars} rounds={rounds} fetchRounds={fetchRounds}/> :
+                    <div className="fw-bold"> Warning: There was an issue loading character data.</div>
+                    } 
+                </Card.Body>
+                </Card>
+                <Card border="" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
+                    <Card.Title className="text-center fw-bold px-3 py-2">
+                        <div className="text-white">Player Statistics</div>
+                    </Card.Title>
+                    <Card.Body>
+                        <PlayerStatTable chars={chars} rounds={rounds}></PlayerStatTable>
+                    </Card.Body>
+                </Card>
+            </Stack>
+        
+        
     );
 };
 

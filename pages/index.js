@@ -1,10 +1,40 @@
 import { Container } from "react-bootstrap";
 import { PlayerDashboard } from "../components/dashboard/player-dashboard.js";
+import { fetchAllChars } from "../utils/db-requests/char-requests.js";
+import { fetchAllRounds } from "../utils/db-requests/round-requests.js";
 
-function App() {
+export async function getServerSideProps(context) {
+
+    let chars;
+    let rounds;
+
+    try {
+        chars = await fetchAllChars();
+        rounds = await fetchAllRounds();
+    } 
+    catch (error) {
+        console.log("There was an error loading server side props: ", error);
+    }
+
+    // fetch the chars
+    if (chars, rounds) {
+        let loadedChars = JSON.parse(JSON.stringify(chars));
+        let loadedRounds = JSON.parse(JSON.stringify(rounds));
+        return {
+            props: {loadedChars: loadedChars, loadedRounds: loadedRounds}, // will be passed to the page component as props
+          }
+    } else {
+        return {
+            notFound: true,
+        }
+    } 
+};
+
+
+export default function App({ loadedChars, loadedRounds }) {
 
     return (
-        <div style={{backgroundColor : 'black', height : "100vh"}}>
+        <div style={{backgroundColor : 'black', height : "150vh"}}>
         <div className="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
             <div className="mb-4 mb-lg-0 ps-5">
                 <h4 className="text-white">Character List</h4>
@@ -12,67 +42,14 @@ function App() {
             </div>
         </div>
 
-        <Container>
-            <PlayerDashboard/>
-        </Container>
+        <div className="d-flex justify-content-center">
+            <PlayerDashboard loadedChars={loadedChars} loadedRounds={loadedRounds}/>
+        </div>
+        
+        
         
         
         </div>
     );
 
-}
-
-export default App;
-
-
-
-
-
-
-// import Head from 'next/head';
-// import Nav from '../components/Nav';
-// import PostCard from '../components/PostCard';
-// import styles from '../styles/Home.module.css';
-
-// export default function Home({ posts }) {
-//     return (
-//         <div>
-//             <Head>
-//                 <title>Home</title>
-//             </Head>
-
-//             <Nav />
-
-//             <main>
-//                 <div className={styles.container}>
-//                     {posts.length === 0 ? (
-//                         <h2>No added posts</h2>
-//                     ) : (
-//                         <ul>
-//                             {posts.map((post, i) => (
-//                                 <PostCard post={post} key={i} />
-//                             ))}
-//                         </ul>
-//                     )}
-//                 </div>
-//             </main>
-//         </div>
-//     );
-// }
-
-// export async function getServerSideProps(ctx) {
-//     // get the current environment
-//     let dev = process.env.NODE_ENV !== 'production';
-//     let { DEV_URL, PROD_URL } = process.env;
-
-//     // request posts from api
-//     let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/posts`);
-//     // extract the data
-//     let data = await response.json();
-
-//     return {
-//         props: {
-//             posts: data['message'],
-//         },
-//     };
-// }
+};
