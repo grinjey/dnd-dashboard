@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PlayersListRow } from "./player-row";
 import Table from "react-bootstrap/Table";
-import { updateDamage, addRound } from "../../api/rounds-api";
-import { updateTime } from "../../api/time-api";
+import { updateDamage, addRound } from "../../requests/rounds-api";
+import { updateTime } from "../../requests/time-api";
 
 
 const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {

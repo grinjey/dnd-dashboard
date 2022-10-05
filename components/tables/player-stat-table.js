@@ -31,74 +31,78 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
     )
 
     useEffect(() => {
+
+        const buildDprs = () => {
+
+            console.log("Building stats")
+    
+            
+    
+            let roundsByChars = chars.map(char => {
+                let charRounds = roundsToUse.filter(function(round) {return round.char_id === char._id;})
+                return {char: char.name, charRounds: charRounds}
+            })
+    
+            return roundsByChars.map(roundsByChar => {
+                let totalDamageOutput = [];
+                let totalDamageTaken = [];
+                let totalTime = [];
+    
+                roundsByChar.charRounds.map(charRound => {
+                    if (charRound.damage_output !== undefined) {
+                        totalDamageOutput.push(eval(charRound.damage_output));
+                    }
+                    
+                    if (charRound.damage_taken !== undefined) {
+                        totalDamageTaken.push(eval(charRound.damage_taken));
+                    }
+    
+                    if (charRound.round_time !== undefined) {
+                        totalTime.push(eval(charRound.round_time));
+                    }
+                })
+                
+                let damageOutputPerRoundTrunc;
+                let damageTakenPerRoundTrunc;
+                let timePerRoundTrunc;
+                let sumTotalTime;
+    
+                if (totalDamageOutput.length > 0) {
+                    let damageOutputPerRound = totalDamageOutput.reduce((a, b) => a + b) / totalDamageOutput.length
+                    damageOutputPerRoundTrunc = Number(damageOutputPerRound).toFixed(2)
+                } else {
+                    damageOutputPerRoundTrunc = 0;
+                }
+    
+                if (totalDamageTaken.length > 0) {
+                    let damageTakenPerRound = totalDamageTaken.reduce((a, b) => a + b) / totalDamageTaken.length
+                    damageTakenPerRoundTrunc = Number(damageTakenPerRound).toFixed(2)
+                } else {
+                    damageTakenPerRoundTrunc = 0;
+                }
+    
+                if (totalTime.length > 0) {
+                    sumTotalTime = totalTime.reduce((a, b) => a + b)
+                    let timePerRound =  sumTotalTime / totalTime.length
+                    timePerRoundTrunc = Number(timePerRound).toFixed(2)
+                } else {
+                    timePerRoundTrunc = 0;
+                    sumTotalTime = 0;
+                }
+    
+                return {name: roundsByChar.char, dopr: damageOutputPerRoundTrunc, dtpr: damageTakenPerRoundTrunc, tpr: timePerRoundTrunc, stt: sumTotalTime};
+    
+            })
+            
+        };
+
         let dprs = buildDprs();
         setCharDprs(dprs);
+        
     }, [roundsToUse]
     )
 
-    const buildDprs = () => {
-
-        console.log("Building stats")
-
-        
-
-        let roundsByChars = chars.map(char => {
-            let charRounds = roundsToUse.filter(function(round) {return round.char_id === char._id;})
-            return {char: char.name, charRounds: charRounds}
-        })
-
-        return roundsByChars.map(roundsByChar => {
-            let totalDamageOutput = [];
-            let totalDamageTaken = [];
-            let totalTime = [];
-
-            roundsByChar.charRounds.map(charRound => {
-                if (charRound.damage_output !== undefined) {
-                    totalDamageOutput.push(eval(charRound.damage_output));
-                }
-                
-                if (charRound.damage_taken !== undefined) {
-                    totalDamageTaken.push(eval(charRound.damage_taken));
-                }
-
-                if (charRound.round_time !== undefined) {
-                    totalTime.push(eval(charRound.round_time));
-                }
-            })
-            
-            let damageOutputPerRoundTrunc;
-            let damageTakenPerRoundTrunc;
-            let timePerRoundTrunc;
-            let sumTotalTime;
-
-            if (totalDamageOutput.length > 0) {
-                let damageOutputPerRound = totalDamageOutput.reduce((a, b) => a + b) / totalDamageOutput.length
-                damageOutputPerRoundTrunc = Number(damageOutputPerRound).toFixed(2)
-            } else {
-                damageOutputPerRoundTrunc = 0;
-            }
-
-            if (totalDamageTaken.length > 0) {
-                let damageTakenPerRound = totalDamageTaken.reduce((a, b) => a + b) / totalDamageTaken.length
-                damageTakenPerRoundTrunc = Number(damageTakenPerRound).toFixed(2)
-            } else {
-                damageTakenPerRoundTrunc = 0;
-            }
-
-            if (totalTime.length > 0) {
-                sumTotalTime = totalTime.reduce((a, b) => a + b)
-                let timePerRound =  sumTotalTime / totalTime.length
-                timePerRoundTrunc = Number(timePerRound).toFixed(2)
-            } else {
-                timePerRoundTrunc = 0;
-                sumTotalTime = 0;
-            }
-
-            return {name: roundsByChar.char, dopr: damageOutputPerRoundTrunc, dtpr: damageTakenPerRoundTrunc, tpr: timePerRoundTrunc, stt: sumTotalTime};
-
-        })
-        
-    };
+    
 
     const selectFilter = (event) => {
         if ( event === "0" ) {

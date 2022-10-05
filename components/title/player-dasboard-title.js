@@ -3,7 +3,7 @@ import PlayerNavDropdown from "../dropdown/player-nav-dropdown";
 import { FormModalContainer } from "../modal/modal";
 import { PlayerAddForm, PlayerRemoveForm } from "../forms";
 import { useState } from "react";
-import { charCreate, charRemove } from "../../api/chars-api";
+import { charCreate, charRemove } from "../../requests/chars-api";
 
 const PlayerDashboardTitle = ({ chars, fetchChars }) => {
 

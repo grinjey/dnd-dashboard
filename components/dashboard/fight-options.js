@@ -5,8 +5,8 @@ import FormModalContainer from "../modal/modal";
 import ConfirmDeleteModal from "../modal/confirm-delete-modal";
 import FightSelectDropdown from "../dropdown/fight-select-dropdown";
 import RoundSelectDropdown from "../dropdown/round-select-dropdown";
-import { addFight, addFightRound, deleteFight} from "../../api/fights-api";
-import { addBatchRounds, deleteRound } from "../../api/rounds-api";
+import { addFight, addFightRound, deleteFight} from "../../requests/fights-api";
+import { addBatchRounds, deleteRound } from "../../requests/rounds-api";
 
 
 const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fetchRounds}) => {
@@ -14,23 +14,24 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
     const [fightToCreate, setFightToCreate] = useState('');
     const [createdFight, setCreatedFight] = useState('');
 
-    const selectNewFight = useCallback(() => {
-        if (createdFight.length > 0) {
-            console.log("selecting new fight")
-            const newFight = fights.find((item) => item.fight_name === createdFight);
-            if (newFight !== undefined) {
-                console.log(newFight);
-                setFight(newFight);
-                setRound(Number(newFight.rounds));
-                setCreatedFight('');
-            }
-        }
-        
-    }, [fights, createdFight]
-    );
+    
 
     useEffect(() => {
         
+        const selectNewFight = () => {
+            if (createdFight.length > 0) {
+                console.log("selecting new fight")
+                const newFight = fights.find((item) => item.fight_name === createdFight);
+                if (newFight !== undefined) {
+                    console.log(newFight);
+                    setFight(newFight);
+                    setRound(Number(newFight.rounds));
+                    setCreatedFight('');
+                }
+            }
+            
+        }
+
         const updateFight = () => {
             if (fight._id !== undefined) {
                 console.log("updating fights")
@@ -43,7 +44,7 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
         updateFight();
         selectNewFight();
         
-    }, [fights, fight._id, selectNewFight]
+    }, [fights, fight._id, createdFight]
     );
 
     const submitFightAdd = async () => {
