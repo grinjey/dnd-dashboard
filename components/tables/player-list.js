@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PlayersListRow } from "./player-row";
 import Table from "react-bootstrap/Table";
-import { updateDamage, addRound } from "../../requests/rounds-api";
-import { updateTime } from "../../requests/time-api";
+import axios from "axios";
+
 
 
 const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
@@ -14,7 +14,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
         const mergeCharRounds = () => {
             const map = new Map();
-            const props = ["damage_output", "damage_taken", "round_time"]
+            const props = ["damage_output", "damage_taken", "round_time", "round_id", "fight_id"]
             chars.forEach(char => map.set(char._id, char));
             rounds.forEach(round => map.set(
                 round.char_id, 
@@ -79,10 +79,18 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             damage_taken: eval(damage_taken)
         }
 
-        console.log("ADDING ROUND: ")
         console.log(roundToAdd)
-        const url = '/api/rounds'
-        await addRound(roundToAdd, url);
+        try {
+            console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
+            const response = await axios
+                .post('/api/rounds', roundToAdd);
+        
+            console.log(response.data);
+        } 
+        catch (error) {
+            console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
+            ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
+        }
         
     }
 
@@ -108,7 +116,17 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             damage_output: eval(damageOutput),
         }
 
-        await updateDamage({update});
+        try {
+            console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+            const response = await axios
+                .put('/api/rounds', update);
+    
+            console.log(response);
+        } 
+        catch (error) {
+            console.error(`There was an error updating damage for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
     };
 
     const handleDamageTaken = async ({char, damageTaken}) => {
@@ -133,30 +151,19 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             damage_taken: eval(damageTaken),
         }
 
-        await updateDamage({update});
+        try {
+            console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+            const response = await axios
+                .put('/api/rounds', update);
+    
+            console.log(response);
+        } 
+        catch (error) {
+            console.error(`There was an error updating damage for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
     };
 
-    const handleUpdateTime = async ({char, seconds}) => {
-
-        if (char._id !== undefined && fight._id !== undefined && round !== 0) {
-            await updateRoundTime({char, seconds});
-            await fetchRounds();
-        } else {
-            console.log("Cannot update round time when not enough info present");
-        }
-    }
-
-    const updateRoundTime = async ({char, seconds}) => {
-        const update = {
-            fight_id: fight._id,
-            round_id: round,
-            char_id: char._id,
-            round_time: Number(seconds),
-        }
-
-        await updateTime(update);
-
-    }
 
     return (
 
@@ -179,7 +186,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                                 handleInitiative={handleInitiative}
                                 handleDamageOutput={handleDamageOutput}
                                 handleDamageTaken={handleDamageTaken}
-                                handleUpdateTime={handleUpdateTime}>
+                                fetchRounds={fetchRounds}>
 
                             </PlayersListRow>
                         )
