@@ -111,6 +111,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
         const response = await fetch('/api/rounds', {method: 'PUT', body: JSON.stringify(update)});
         const data = await response.json();
         console.log(data.data);
+        console.log("TEST")
     };
 
     const handleDamageTaken = async ({char, damageTaken}) => {
