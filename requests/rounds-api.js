@@ -60,12 +60,12 @@ export async function updateDamage({update}) {
     }
 };
 
-export async function addRound(roundToAdd) {
+export async function addRound(roundToAdd, url) {
     
     try {
         console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
         const response = await axios
-            .post('/api/rounds', roundToAdd);
+            .post(url, roundToAdd);
     
         console.log(response.data);
     } 

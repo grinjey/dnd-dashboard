@@ -28,7 +28,8 @@ const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
 
     return (
         <>
-        <FightOptions 
+        <FightOptions
+            chars={chars} 
             fight={fight}
             fights={fights}
             round={round}

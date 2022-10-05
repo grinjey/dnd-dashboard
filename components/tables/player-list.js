@@ -81,8 +81,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
         console.log("ADDING ROUND: ")
         console.log(roundToAdd)
-
-        await addRound(roundToAdd);
+        const url = '/api/rounds'
+        await addRound(roundToAdd, url);
         
     }
 

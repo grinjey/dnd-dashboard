@@ -30,7 +30,7 @@ async function batchRoundAdd(req, res) {
         const bulk = req.body.collection.map(document => {
             const inner = {
                 "filter": { fight_id: document.fight_id, round_id: document.round_id, char_id: document.char_id },
-                "update": { $setOnInsert : { fight_id: document.fight_id, round_id: document.round_id, char_id: document.char_id, damage_output: 0, damage_taken: 0}},
+                "update": { $setOnInsert : { fight_id: document.fight_id, round_id: document.round_id, char_id: document.char_id, damage_output: undefined, damage_taken: undefined}},
                 "upsert" : true
             };
             const request = {updateOne: inner};

@@ -24,7 +24,7 @@ export const CellSubmit = ({value, onChange, onSubmit}) => {
                 <input className="bg-secondary text-black fw-bold" type="number" onChange={(e) => onChange(e.target.value)} onBlur={() => onBlur()} />
             </span>
              : 
-            <div onClick={() => onFocus()}>{value !== undefined ? value : "-"}</div>
+            <div onClick={() => onFocus()}>{value !== undefined && value !== null ? value : "-"}</div>
     );
 
 };

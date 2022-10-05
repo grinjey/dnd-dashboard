@@ -9,7 +9,7 @@ import { addFight, addFightRound, deleteFight} from "../../requests/fights-api";
 import { addBatchRounds, deleteRound } from "../../requests/rounds-api";
 
 
-const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fetchRounds}) => {
+const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFights, fetchRounds}) => {
     
     const [fightToCreate, setFightToCreate] = useState('');
     const [createdFight, setCreatedFight] = useState('');
@@ -123,7 +123,7 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
             const newRounds = fight.rounds + 1;
             const roundId = Number(newRounds);
             await handleCreateNewFightRound(roundId);
-            await handleBatchRoundInsert(fightId, roundId);
+            // await handleBatchRoundInsert(fightId, roundId);
             await fetchFights();
             await fetchRounds();
         }
