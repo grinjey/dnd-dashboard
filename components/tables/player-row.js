@@ -15,7 +15,6 @@ export const PlayersListRow = ({char, initiative, handleInitiative, handleDamage
 
       await handleDamageOutput({char, damageOutput});
     }
-    setDamageOutput(null);
     
   };
 
@@ -23,7 +22,6 @@ export const PlayersListRow = ({char, initiative, handleInitiative, handleDamage
     if (damageTaken !== null && damageTaken !== undefined && damageTaken !== '') {
       await handleDamageTaken({char, damageTaken});
     }
-    setDamageTaken(null);
   }
 
   const handleUpdateTime = async ({char, seconds}) => {

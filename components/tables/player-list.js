@@ -104,7 +104,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
         console.log(fight._id);
         console.log(round);
 
-        if (char.damage_output !== undefined && char.damage_taken !== undefined && damageOutput !== undefined && fight._id !== undefined && round !== 0) {
+        // if (char.damage_output !== undefined && char.damage_taken !== undefined && damageOutput !== undefined && fight._id !== undefined && round !== 0) {
+        if (char.damage_output !== undefined && char.damage_taken !== undefined) {
 
             const update = {
                 fight_id: fight._id,
@@ -126,8 +127,9 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                             for fight ${update.fight_id} round ${update.round_id}: ${error}`)
             }
 
+            // fight._id !== undefined && round !== 0 && damageOutput !== undefined
 
-        } else if (fight._id !== undefined && round !== 0 && damageOutput !== undefined) {
+        } else if (round !== 0) {
 
             console.log("CREATING NEW ROUND")
 
@@ -184,7 +186,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
     // };
 
     const handleDamageTaken = async ({char, damageTaken}) => {
-        if (char.damage_output !== undefined && char.damage_taken !== undefined && damageTaken !== undefined && fight._id !== undefined && round !== 0) {
+        // if (char.damage_output !== undefined && char.damage_taken !== undefined && damageTaken !== undefined && fight._id !== undefined && round !== 0) {
+        if (char.damage_output !== undefined && char.damage_taken !== undefined) {
 
             const update = {
                 fight_id: fight._id,
@@ -206,9 +209,9 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                             for fight ${update.fight_id} round ${update.round_id}: ${error}`)
             }
 
-            
+            // if (fight._id !== undefined && round !== 0 && damageTaken !== undefined)
 
-        } else if (fight._id !== undefined && round !== 0 && damageTaken !== undefined) {
+        } else if (round !== 0) {
 
             console.log("CREATING NEW ROUND")
             
@@ -232,8 +235,9 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                 console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
                 ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
             }
+        }
 
-        } else {
+        else {
             console.log("Cannot update a round for a fight/round that does not exist.")
         }
         
