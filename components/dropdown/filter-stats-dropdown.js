@@ -17,7 +17,7 @@ const FilterStatsDropdown = ({fights, onSelect, title}) => {
                         <Dropdown.Item className='text-white' key={fight._id} eventKey={fight._id}>{fight.fight_name}</Dropdown.Item>
                         )
                     )
-                    ) : (<div></div>)
+                    ) : (<div className='text-center'> No Fights </div>)
                 }
 
             </Dropdown.Menu>

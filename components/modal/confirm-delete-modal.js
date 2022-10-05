@@ -32,7 +32,7 @@ export function ConfirmDeleteModal({triggerText, onSubmit, itemToDelete}) {
 
                 <Modal.Footer className="bg-dark border border-danger">
                 <Button variant="danger" onClick={handleSubmit}>Delete</Button>
-                <Button variant="success"onClick={handleSubmit}>Cancel</Button>
+                <Button variant="success"onClick={closeModal}>Cancel</Button>
                 </Modal.Footer>
 
             </Modal>

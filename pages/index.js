@@ -25,8 +25,6 @@ export async function getServerSideProps(context) {
         let loadedRounds = JSON.parse(JSON.stringify(rounds));
         let loadedFights = JSON.parse(JSON.stringify(fights));
 
-        console.log(loadedFights);
-
         return {
             props: {loadedChars: loadedChars, loadedRounds: loadedRounds, loadedFights: loadedFights}, // will be passed to the page component as props
           }

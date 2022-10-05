@@ -27,7 +27,7 @@ const updateRoundTime = async (req, res) => {
         // connect to the database
         let { db } = await connectToDatabase();
 
-        if (req.body.round_id && req.body.fight_id && req.body.char_id && req.body.round_time !== undefined) {
+        if (req.body.round_id !== undefined && req.body.fight_id !== undefined && req.body.char_id !== undefined && req.body.round_time !== undefined) {
     
             await db.collection('rounds').updateOne(
                 {
@@ -35,8 +35,7 @@ const updateRoundTime = async (req, res) => {
                     fight_id: req.body.fight_id,
                     round_id: req.body.round_id
                 },
-                { $set: {round_time: req.body.round_time} },
-                {upsert: true}
+                { $set: {round_time: req.body.round_time} }
             );
     
             return res.json({

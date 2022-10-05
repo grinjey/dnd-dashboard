@@ -25,7 +25,7 @@ export function FormModalContainer({triggerText, form, formId}) {
                 {form}
                 </Modal.Body>
                 <Modal.Footer className="bg-dark border border-white">
-                <Button variant="secondary" type="submit" form={formId} onClick={closeModal}>
+                <Button variant="success" type="submit" form={formId} onClick={closeModal}>
                     Save Changes
                 </Button>
                 </Modal.Footer>

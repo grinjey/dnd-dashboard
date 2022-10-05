@@ -157,7 +157,7 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
                     <Stack direction="horizontal" gap={2}>
                         <FightSelectDropdown fights={fights} selectFight={selectFight}></FightSelectDropdown>
                         <FormModalContainer triggerText={'Create New Fight'} form={ <FightAddForm handleSubmit={handleFightAdd} setFight={setFightToCreate} formId="fightAdd"/>} formId="fightAdd"/>
-                        <Button variant="dark" size="sm" onClick={handleFightDelete}>Delete Fight</Button>
+                        <ConfirmDeleteModal triggerText={"Delete Fight"} onSubmit={handleFightDelete} itemToDelete={`Fight: ${fight.fight_name}`}></ConfirmDeleteModal>
                     </Stack>
                     
                     

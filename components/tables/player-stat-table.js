@@ -8,12 +8,32 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
     const [charDprs, setCharDprs] = useState({})
     const [filter, setFilter] = useState("All");
     const [roundsToUse, setRoundsToUse] = useState(rounds);
+    const [selectedFight, setSelectedFight] = useState(null);
 
+
+    useEffect(() => {
+
+        const refreshRoundsToUse = () => {
+
+            if (selectedFight === null) {
+                setRoundsToUse(rounds);
+            } else if (selectedFight._id !== undefined) {
+                let filterRounds = rounds.filter(function(round) {return round.fight_id === selectedFight._id;})
+                setRoundsToUse(filterRounds);
+            }
+
+        }
+
+        refreshRoundsToUse();
+
+
+    }, [chars, rounds, fights, selectedFight]
+    )
 
     useEffect(() => {
         let dprs = buildDprs();
         setCharDprs(dprs);
-    }, [chars, rounds, roundsToUse]
+    }, [roundsToUse]
     )
 
     const buildDprs = () => {
@@ -49,6 +69,7 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
             let damageOutputPerRoundTrunc;
             let damageTakenPerRoundTrunc;
             let timePerRoundTrunc;
+            let sumTotalTime;
 
             if (totalDamageOutput.length > 0) {
                 let damageOutputPerRound = totalDamageOutput.reduce((a, b) => a + b) / totalDamageOutput.length
@@ -65,13 +86,15 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
             }
 
             if (totalTime.length > 0) {
-                let timePerRound = totalTime.reduce((a, b) => a + b) / totalTime.length
+                sumTotalTime = totalTime.reduce((a, b) => a + b)
+                let timePerRound =  sumTotalTime / totalTime.length
                 timePerRoundTrunc = Number(timePerRound).toFixed(2)
             } else {
                 timePerRoundTrunc = 0;
+                sumTotalTime = 0;
             }
 
-            return {name: roundsByChar.char, dopr: damageOutputPerRoundTrunc, dtpr: damageTakenPerRoundTrunc, tpr: timePerRoundTrunc};
+            return {name: roundsByChar.char, dopr: damageOutputPerRoundTrunc, dtpr: damageTakenPerRoundTrunc, tpr: timePerRoundTrunc, stt: sumTotalTime};
 
         })
         
@@ -80,17 +103,19 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
     const selectFilter = (event) => {
         if ( event === "0" ) {
             setFilter("All");
-            setRoundsToUse(rounds);
+            // setRoundsToUse(rounds);
+            setSelectedFight(null);
         } else {
-            let filterRounds = rounds.filter(function(round) {return round.fight_id === event;})
-            setRoundsToUse(filterRounds);
+            // let filterRounds = rounds.filter(function(round) {return round.fight_id === event;})
+            // setRoundsToUse(filterRounds);
 
             let selectedFight = fights.find((item) => item._id === event);
             setFilter(selectedFight.fight_name);
+            setSelectedFight(selectedFight);
 
 
         }
-    }
+    };
 
     return (
         <Card border="" style={{backgroundColor : "#062206"}} className="d-flex table-wrapper table-responsive shadow-sm">
@@ -109,6 +134,7 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
                         <th className="border-bottom text-secondary">Damage Out/Round</th>
                         <th className="border-bottom text-secondary">Damage Taken/Round</th>
                         <th className="border-bottom text-secondary">Time/Round</th>
+                        <th className="border-bottom text-secondary">Total Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +145,7 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
                                 <td><span>{dpr.dopr ? dpr.dopr : 0}</span></td>
                                 <td><span>{dpr.dtpr ? dpr.dtpr : 0}</span></td>
                                 <td><span>{dpr.tpr ? dpr.tpr : 0}s</span></td>
+                                <td><span>{dpr.stt ? dpr.stt : 0}s</span></td>
                                 
                             </tr>
                             )
