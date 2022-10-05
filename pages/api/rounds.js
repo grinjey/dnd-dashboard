@@ -9,12 +9,12 @@ export default async function handler(req, res) {
             return getRounds(req, res);
         }
 
-        case 'PUT': {
-            return updateRound(req, res);
-        }
+        // case 'PUT': {
+        //     return updateRound(req, res);
+        // }
 
         case 'POST': {
-            return addRound(req, res);
+            return updateRound(req, res);
         }
 
         case 'DELETE': {
@@ -36,7 +36,7 @@ async function addRound(req, res) {
             let { db } = await connectToDatabase();
             // add the post
             // await db.collection('chars').insertOne(req.body);
-            await db.collection('rounds').update(req.body, {$setOnInsert: 
+            await db.collection('rounds').updateOne(req.body, {$setOnInsert: 
                 {
                 char_id: req.body.char_id,
                 fight_id: req.body.fight_id,
@@ -91,36 +91,49 @@ async function updateRound(req, res) {
     try {
         // connect to the database
         let { db } = await connectToDatabase();
-        
-        let set;
 
-
-        if (req.body.round_id !== undefined && req.body.fight_id !== undefined && req.body.char_id !== undefined) {
-            if (req.body.damage_taken == undefined) {
-                set = {damage_output: req.body.damage_output};
-            } else {
-                set = {damage_taken: req.body.damage_taken}
-            }
+        console.log(req.body)
 
             await db.collection('rounds').updateOne(
-                {
-                    char_id: req.body.char_id,
-                    fight_id: req.body.fight_id,
-                    round_id: req.body.round_id
-                },
-                { $set: set }
+                {fight_id: req.body.fight_id, round_id: req.body.round_id, char_id: req.body.char_id},
+                { $set:  {damage_output: req.body.damage_output, damage_taken: req.body.damage_taken}},
+                {upsert: true}
             );
+
+            
+
+
+        // let set;
+
+        // console.log(req.body)
+
+        // if (req.body.round_id !== undefined && req.body.fight_id !== undefined && req.body.char_id !== undefined) {
+        //     if (req.body.damage_taken == undefined) {
+        //         set = {damage_output: req.body.damage_output};
+        //     } else {
+        //         set = {damage_taken: req.body.damage_taken}
+        //     }
+
+        //     await db.collection('rounds').updateOne(
+        //         {
+        //             char_id: req.body.char_id,
+        //             fight_id: req.body.fight_id,
+        //             round_id: req.body.round_id
+        //         },
+        //         { $setOnInsert: {damage_output: req.body.damage_output, damage_taken: req.body.damage_taken} },
+        //         {upsert: true}
+        //     );
     
             return res.json({
                 data: 'Round updated successfully',
                 success: true,
             });
-        } else {
-            return res.json({
-                data: 'Round not updated: Missing info',
-                success: false,
-            });
-        }
+        // } else {
+        //     return res.json({
+        //         data: 'Round not updated: Missing info',
+        //         success: false,
+        //     });
+        // }
 
     } catch (error) {
 
