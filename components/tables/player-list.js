@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PlayersListRow } from "./player-row";
 import Table from "react-bootstrap/Table";
 import { updateDamage, addRound } from "../../requests/rounds-api";
-// import { updateTime } from "../../requests/time-api";
+import { updateTime } from "../../requests/time-api";
 
 
 const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
@@ -136,27 +136,27 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
         await updateDamage({update});
     };
 
-    // const handleUpdateTime = async ({char, seconds}) => {
+    const handleUpdateTime = async ({char, seconds}) => {
 
-    //     if (char._id !== undefined && fight._id !== undefined && round !== 0) {
-    //         await updateRoundTime({char, seconds});
-    //         await fetchRounds();
-    //     } else {
-    //         console.log("Cannot update round time when not enough info present");
-    //     }
-    // }
+        if (char._id !== undefined && fight._id !== undefined && round !== 0) {
+            await updateRoundTime({char, seconds});
+            await fetchRounds();
+        } else {
+            console.log("Cannot update round time when not enough info present");
+        }
+    }
 
-    // const updateRoundTime = async ({char, seconds}) => {
-    //     const update = {
-    //         fight_id: fight._id,
-    //         round_id: round,
-    //         char_id: char._id,
-    //         round_time: Number(seconds),
-    //     }
+    const updateRoundTime = async ({char, seconds}) => {
+        const update = {
+            fight_id: fight._id,
+            round_id: round,
+            char_id: char._id,
+            round_time: Number(seconds),
+        }
 
-    //     await updateTime(update);
+        await updateTime(update);
 
-    // }
+    }
 
     return (
 
@@ -167,7 +167,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                     <th className="border-bottom text-secondary" role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
                     <th className="border-bottom text-secondary">Damage Output</th>
                     <th className="border-bottom text-secondary">Damage Taken</th>
-                    {/* <th className="border-bottom text-secondary">Round Time</th> */}
+                    <th className="border-bottom text-secondary">Round Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -179,10 +179,9 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                                 handleInitiative={handleInitiative}
                                 handleDamageOutput={handleDamageOutput}
                                 handleDamageTaken={handleDamageTaken}
-                                >
+                                handleUpdateTime={handleUpdateTime}>
 
                             </PlayersListRow>
-                            // handleUpdateTime={handleUpdateTime}
                         )
                         )
                     ) : (

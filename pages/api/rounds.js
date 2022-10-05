@@ -2,7 +2,6 @@ const { connectToDatabase } = require('../../utils/mongodb');
 const ObjectId = require('mongodb').ObjectId;
 const { fetchAllRounds } = require("../../utils/db-requests/round-requests")
 
-
 export default async function handler(req, res) {
     // switch the methods
     switch (req.method) {
@@ -95,20 +94,19 @@ async function updateRound(req, res) {
         
         let set;
 
-        let body = JSON.parse(req.body);
 
-        if (body.round_id !== undefined && body.fight_id !== undefined && body.char_id !== undefined) {
-            if (body.damage_taken == undefined) {
-                set = {damage_output: body.damage_output};
+        if (req.body.round_id !== undefined && req.body.fight_id !== undefined && req.body.char_id !== undefined) {
+            if (req.body.damage_taken == undefined) {
+                set = {damage_output: req.body.damage_output};
             } else {
-                set = {damage_taken: body.damage_taken}
+                set = {damage_taken: req.body.damage_taken}
             }
 
             await db.collection('rounds').updateOne(
                 {
-                    char_id: body.char_id,
-                    fight_id: body.fight_id,
-                    round_id: body.round_id
+                    char_id: req.body.char_id,
+                    fight_id: req.body.fight_id,
+                    round_id: req.body.round_id
                 },
                 { $set: set }
             );
