@@ -103,8 +103,6 @@ async function updateRound(req, res) {
             } else {
                 set = {damage_taken: body.damage_taken}
             }
-            
-            console.log("MADE IT HERE 4")
 
             await db.collection('rounds').updateOne(
                 {
