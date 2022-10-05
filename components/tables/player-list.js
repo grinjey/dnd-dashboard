@@ -9,8 +9,6 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
     const [playerInitiatives, setPlayerInitiatives] = useState({});
     const [charsToUse, setCharsToUse] = useState([]);
-    const [damageOutput, setDamageOutput] = useState(null);
-    const [damageTaken, setDamageTaken] = useState(null);
 
     useEffect(() => {
 
@@ -57,49 +55,44 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
         setCharsToUse(updatedChars);
     };
 
-    // const createRound = async ({char, damageOutput, damageTaken}) => {
+    
+    const handleDamage = async ({fight_id, round_id, char_id, damage_ouput, damage_taken}) => {
 
-    //     let damage_output;
-    //     let damage_taken;
+        let damageOutput = damage_ouput ? damage_ouput : 0;
+        let damageTaken = damage_taken ? damage_taken : 0;
 
-    //     if (damageOutput === null && damageTaken !== null) {
-    //         damage_output = 0;
-    //         damage_taken = damageTaken;
-    //     } else if (damageTaken === null && damage_output !== null) {
-    //         damage_output = damageOutput;
-    //         damage_taken = 0;
-    //     } else {
-    //         damage_output = 0;
-    //         damage_taken = 0;
-    //     }
+        const update = {
+            fight_id: fight_id,
+            round_id: round_id,
+            char_id: char_id,
+            damage_output: eval(damageOutput),
+            damage_taken: eval(damageTaken)
+        }
 
-    //     const roundToAdd = {
-    //         fight_id: fight._id,
-    //         round_id: round,
-    //         char_id: char._id,
-    //         damage_output: eval(damage_output),
-    //         damage_taken: eval(damage_taken)
-    //     }
+        console.log(update);
 
-    //     console.log(roundToAdd)
-    //     try {
-    //         console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
-    //         const response = await axios
-    //             .post('/api/rounds', roundToAdd);
-        
-    //         console.log(response.data);
-    //     } 
-    //     catch (error) {
-    //         console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
-    //         ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
-    //     }
-        
-    // }
+        try {
+            console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output, update.damage_taken}`);
+            const response = await axios
+                .post('/api/rounds', update);
+    
+            console.log(response);
+        } 
+        catch (error) {
+            console.error(`There was an error updating damage for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
 
-    const handleDamageOutput = async ({char}) => {
+        await fetchRounds();
+
+    }
+
+
+
+    const handleDamageOutput = async (char) => {
 
         // if (char.damage_output !== undefined && char.damage_taken !== undefined && damageOutput !== undefined && fight._id !== undefined && round !== 0) {
-        if (damageOutput !== null && damageOutput !== undefined && damageOutput !== '') {
+        
             if (char.damage_output !== undefined && char.damage_taken !== undefined) {
 
                 const update = {
@@ -154,96 +147,148 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             }
     
             await fetchRounds();
-        }
-        
-        
     }
 
-    // const updateRoundDamageOutput = async ({char, damageOutput}) => {
 
-    //     const update = {
+    const handleDamageTaken = async (char) => {
+
+        if (char.damage_output !== undefined && char.damage_taken !== undefined ) {
+
+            const update = {
+                fight_id: fight._id,
+                round_id: round,
+                char_id: char._id,
+                damage_taken: eval(damageTaken),
+                damage_output: char.damage_output
+            }
+    
+            try {
+                console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+                const response = await axios
+                    .post('/api/rounds', update);
+        
+                console.log(response);
+            } 
+            catch (error) {
+                console.error(`There was an error updating damage for char: ${update.char_id} 
+                            for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+            }
+
+            // if (fight._id !== undefined && round !== 0 && damageTaken !== undefined)
+
+        } else if (round !== 0) {
+
+            console.log("CREATING NEW ROUND")
+            
+            const roundToAdd = {
+                fight_id: fight._id,
+                round_id: round,
+                char_id: char._id,
+                damage_output: 0,
+                damage_taken: eval(damageTaken)
+            }
+    
+            console.log(roundToAdd)
+            try {
+                console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
+                const response = await axios
+                    .post('/api/rounds', roundToAdd);
+            
+                console.log(response.data);
+            } 
+            catch (error) {
+                console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
+                ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
+            }
+        }
+
+        else {
+            console.log("Cannot update a round for a fight/round that does not exist.")
+        }
+        
+        await fetchRounds();
+    };
+
+
+    return (
+
+        <Table hover className="align-items-center">
+            <thead>
+                <tr>
+                    <th className="border-bottom text-secondary">Name</th>
+                    <th className="border-bottom text-secondary" role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
+                    <th className="border-bottom text-secondary">Damage Output</th>
+                    <th className="border-bottom text-secondary">Damage Taken</th>
+                    <th className="border-bottom text-secondary">Round Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {charsToUse.length > 0 ? (
+                    charsToUse.map((char, i) => (
+                            <PlayersListRow key={i}
+                                char={char}
+                                round={round}
+                                fight_id={fight._id}
+                                initiative={playerInitiatives[char._id]}
+                                handleInitiative={handleInitiative}
+                                handleDamage={handleDamage}
+                                fetchRounds={fetchRounds}
+                                >
+
+                            </PlayersListRow>
+                        )
+                        )
+                    ) : (
+                        <tr className="table-row">
+                            <td className="table-item" style={{ textAlign: 'center' }} colSpan={6}>There are no Characters to show. Create one!</td>
+                        </tr>
+                    )
+                }
+            </tbody>
+        </Table>
+    )
+}
+
+export default PlayerList;
+
+// const createRound = async ({char, damageOutput, damageTaken}) => {
+
+    //     let damage_output;
+    //     let damage_taken;
+
+    //     if (damageOutput === null && damageTaken !== null) {
+    //         damage_output = 0;
+    //         damage_taken = damageTaken;
+    //     } else if (damageTaken === null && damage_output !== null) {
+    //         damage_output = damageOutput;
+    //         damage_taken = 0;
+    //     } else {
+    //         damage_output = 0;
+    //         damage_taken = 0;
+    //     }
+
+    //     const roundToAdd = {
     //         fight_id: fight._id,
     //         round_id: round,
     //         char_id: char._id,
-    //         damage_output: eval(damageOutput),
-    //         damage_taken: char.damage_taken
+    //         damage_output: eval(damage_output),
+    //         damage_taken: eval(damage_taken)
     //     }
 
+    //     console.log(roundToAdd)
     //     try {
-    //         console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+    //         console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
     //         const response = await axios
-    //             .post('/api/rounds', update);
-    
-    //         console.log(response);
+    //             .post('/api/rounds', roundToAdd);
+        
+    //         console.log(response.data);
     //     } 
     //     catch (error) {
-    //         console.error(`There was an error updating damage for char: ${update.char_id} 
-    //                     for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+    //         console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
+    //         ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
     //     }
-    // };
-
-    const handleDamageTaken = async ({char}) => {
-        // if (char.damage_output !== undefined && char.damage_taken !== undefined && damageTaken !== undefined && fight._id !== undefined && round !== 0) {
-
-        if (damageTaken !== null && damageTaken !== undefined && damageTaken !== '') { 
-            if (char.damage_output !== undefined && char.damage_taken !== undefined ) {
-
-                const update = {
-                    fight_id: fight._id,
-                    round_id: round,
-                    char_id: char._id,
-                    damage_taken: eval(damageTaken),
-                    damage_output: char.damage_output
-                }
         
-                try {
-                    console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
-                    const response = await axios
-                        .post('/api/rounds', update);
-            
-                    console.log(response);
-                } 
-                catch (error) {
-                    console.error(`There was an error updating damage for char: ${update.char_id} 
-                                for fight ${update.fight_id} round ${update.round_id}: ${error}`)
-                }
-    
-                // if (fight._id !== undefined && round !== 0 && damageTaken !== undefined)
-    
-            } else if (round !== 0) {
-    
-                console.log("CREATING NEW ROUND")
-                
-                const roundToAdd = {
-                    fight_id: fight._id,
-                    round_id: round,
-                    char_id: char._id,
-                    damage_output: 0,
-                    damage_taken: eval(damageTaken)
-                }
-        
-                console.log(roundToAdd)
-                try {
-                    console.info(`Creating round: ${roundToAdd.round_id} for fight: ${roundToAdd.fight_id} for ${roundToAdd.char_id}.`)
-                    const response = await axios
-                        .post('/api/rounds', roundToAdd);
-                
-                    console.log(response.data);
-                } 
-                catch (error) {
-                    console.error(`There was an error creating round: ${roundToAdd.round_id} for fight: 
-                    ${roundToAdd.fight_id} for ${roundToAdd.char_id}.: ${error}`)
-                }
-            }
-    
-            else {
-                console.log("Cannot update a round for a fight/round that does not exist.")
-            }
-            
-            await fetchRounds();
-        }
-
-    };
+    // }
 
     // const updateRoundDamageTaken = async ({char, damageTaken}) => {
 
@@ -269,43 +314,25 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
     // };
 
 
-    return (
+    // const updateRoundDamageOutput = async ({char, damageOutput}) => {
 
-        <Table hover className="align-items-center">
-            <thead>
-                <tr>
-                    <th className="border-bottom text-secondary">Name</th>
-                    <th className="border-bottom text-secondary" role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
-                    <th className="border-bottom text-secondary">Damage Output</th>
-                    <th className="border-bottom text-secondary">Damage Taken</th>
-                    <th className="border-bottom text-secondary">Round Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {charsToUse.length > 0 ? (
-                    charsToUse.map((char, i) => (
-                            <PlayersListRow key={i}
-                                char={char}
-                                initiative={playerInitiatives[char._id]}
-                                handleInitiative={handleInitiative}
-                                handleDamageOutput={handleDamageOutput}
-                                handleDamageTaken={handleDamageTaken}
-                                fetchRounds={fetchRounds}
-                                setDamageOutput={setDamageOutput}
-                                setDamageTaken={setDamageTaken}>
+    //     const update = {
+    //         fight_id: fight._id,
+    //         round_id: round,
+    //         char_id: char._id,
+    //         damage_output: eval(damageOutput),
+    //         damage_taken: char.damage_taken
+    //     }
 
-                            </PlayersListRow>
-                        )
-                        )
-                    ) : (
-                        <tr className="table-row">
-                            <td className="table-item" style={{ textAlign: 'center' }} colSpan={6}>There are no Characters to show. Create one!</td>
-                        </tr>
-                    )
-                }
-            </tbody>
-        </Table>
-    )
-}
-
-export default PlayerList;
+    //     try {
+    //         console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+    //         const response = await axios
+    //             .post('/api/rounds', update);
+    
+    //         console.log(response);
+    //     } 
+    //     catch (error) {
+    //         console.error(`There was an error updating damage for char: ${update.char_id} 
+    //                     for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+    //     }
+    // };

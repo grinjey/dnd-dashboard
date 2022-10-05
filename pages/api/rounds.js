@@ -94,46 +94,25 @@ async function updateRound(req, res) {
 
         console.log(req.body)
 
+        if (req.body.fight_id !== undefined && req.body.round_id !== 0) {
             await db.collection('rounds').updateOne(
                 {fight_id: req.body.fight_id, round_id: req.body.round_id, char_id: req.body.char_id},
                 { $set:  {damage_output: req.body.damage_output, damage_taken: req.body.damage_taken}},
                 {upsert: true}
             );
-
-            
-
-
-        // let set;
-
-        // console.log(req.body)
-
-        // if (req.body.round_id !== undefined && req.body.fight_id !== undefined && req.body.char_id !== undefined) {
-        //     if (req.body.damage_taken == undefined) {
-        //         set = {damage_output: req.body.damage_output};
-        //     } else {
-        //         set = {damage_taken: req.body.damage_taken}
-        //     }
-
-        //     await db.collection('rounds').updateOne(
-        //         {
-        //             char_id: req.body.char_id,
-        //             fight_id: req.body.fight_id,
-        //             round_id: req.body.round_id
-        //         },
-        //         { $setOnInsert: {damage_output: req.body.damage_output, damage_taken: req.body.damage_taken} },
-        //         {upsert: true}
-        //     );
     
             return res.json({
                 data: 'Round updated successfully',
                 success: true,
             });
-        // } else {
-        //     return res.json({
-        //         data: 'Round not updated: Missing info',
-        //         success: false,
-        //     });
-        // }
+        } else {
+            return res.json({
+                data: `Cannot update round without proper Fight_id: ${req.body.fight_id} and Round_id: ${req.body.round_id}`,
+                success: true,
+            });
+        }
+
+        
 
     } catch (error) {
 

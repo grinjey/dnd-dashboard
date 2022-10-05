@@ -1,20 +1,38 @@
 import { Cell } from "../cell/cell";
 import CellSubmit from '../cell/cell-with-submit';
 import Timer from '../timer/timer';
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 
-export const PlayersListRow = ({char, initiative, handleInitiative, handleDamageOutput, handleDamageTaken, fetchRounds, setDamageOutput, setDamageTaken}) => {
+export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiative, handleDamage, fetchRounds}) => {
 
+  const [damageOutput, setDamageOutput] = useState('');
+  const [damageTaken, setDamageTaken] = useState('');
 
-  // const submitDamageOutput = async () => {
-  //     await handleDamageOutput({char});
-  // };
+  const submitDamageOutput = async () => {
+    if (damageOutput !== null && damageOutput !== undefined && damageOutput !== '') {
+      await handleDamage({
+        fight_id: fight_id, 
+        round_id: round, 
+        char_id: char._id, 
+        damage_ouput: damageOutput, 
+        damage_taken: char.damage_taken
+      });
+    }
+  };
 
-  // const submitDamageTaken = async () => {
-  //     await handleDamageTaken({char});
-  // }
+  const submitDamageTaken = async () => {
+    if (damageTaken !== null && damageTaken !== undefined && damageTaken !== '') {
+      await handleDamage({
+        fight_id: fight_id, 
+        round_id: round, 
+        char_id: char._id, 
+        damage_ouput: char.damage_output, 
+        damage_taken: damageTaken
+      });
+    }
+  };
 
   const handleUpdateTime = async ({char, seconds}) => {
 
@@ -43,8 +61,8 @@ export const PlayersListRow = ({char, initiative, handleInitiative, handleDamage
     <tr className='bg-secondary align-middle fw-bold text-black text-center'>
       <td><span>{char.name}</span></td>
       <td><span><Cell value={initiative} onChange={(e) => handleInitiative(e, char._id)}/></span></td>
-      <td><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={() => handleDamageOutput({char})}/></span></td>
-      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => handleDamageTaken({char})}/></span></td>
+      <td><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span></td>
+      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={submitDamageTaken}/></span></td>
       <td><Timer onSubmit={handleUpdateTime} char={char}></Timer></td>
         
 
