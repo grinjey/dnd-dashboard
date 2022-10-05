@@ -4,9 +4,9 @@ import Stack from "react-bootstrap/Stack";
 import PlayerDashboardTitle from "../title/player-dasboard-title";
 import PlayerTable from "../tables/player-table";
 import { PlayerStatTable } from "../tables/player-stat-table";
-import { getCharsAll } from "../../api/chars-api";
-import { getRounds } from "../../api/rounds-api";
-import { getFightsAll } from "../../api/fights-api";
+import { getCharsAll } from "../../requests/chars-api";
+import { getRounds } from "../../requests/rounds-api";
+import { getFightsAll } from "../../requests/fights-api";
 
 
 export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
