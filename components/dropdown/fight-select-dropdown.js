@@ -1,30 +1,26 @@
+import { ButtonGroup } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const FightSelectDropdown = ({fights, selectFight}) => {
 
-    const handleSelect=(e)=>{
-        selectFight(e);
-    };
-
     return (
-        <DropdownButton
-        title="Select Fight"
-        id="dropdown-menu-align-right"
-        variant='dark'
-        size='sm'
-        onSelect={handleSelect}
-        >
-            {fights.length > 0 ? (
-                    fights.map((fight) => (
-                        <Dropdown.Item key={fight._id} eventKey={fight._id}>{fight.fight_name}</Dropdown.Item>
+
+        <Dropdown as={ButtonGroup} onSelect={(e) => {selectFight(e)}}>
+            <Dropdown.Toggle className="btn-dark btn-sm" id="filter-stats">Select Fight</Dropdown.Toggle>
+            <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
+                {fights.length > 0 ? (
+                        fights.map((fight) => (
+                            <Dropdown.Item key={fight._id} eventKey={fight._id}>{fight.fight_name}</Dropdown.Item>
+                            )
                         )
-                    )
-                    ) : (
-                        <div className='d-flex justify-content-center'>No Fights...</div>
-                    )
-                }
-        </DropdownButton>
+                        ) : (
+                            <div className='d-flex justify-content-center'>No Fights...</div>
+                        )
+                    }
+
+            </Dropdown.Menu>
+        </Dropdown>
+
     );
 };
 

@@ -3,7 +3,6 @@ import axios from "axios";
 export async function getFightsAll() {
     
     try {
-        console.log("fetching fights");
         const response = await axios.get('/api/fights')
         console.log(response);
         return response.data;
@@ -45,5 +44,21 @@ export async function addFightRound(fight_id, rounds) {
     } 
     catch (error) {
         console.error(`There was an error updating Fight: ${fight_id} rounds: ${error}`)
+    }
+};
+
+export async function deleteFight({fight}) {
+    
+    console.log(fight);
+
+    try {
+        console.log(`Deleting fight: ${fight}`)
+        const response = await axios
+        .delete('/api/fights', {data: fight})
+    
+        console.log(response.data);
+    } 
+    catch (error) {
+        console.error(`There was an error deleting Fight: ${fight} rounds: ${error}`)
     }
 };

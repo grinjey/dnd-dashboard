@@ -1,5 +1,6 @@
 const { connectToDatabase } = require('../../utils/mongodb');
 const ObjectId = require('mongodb').ObjectId;
+const { fetchAllFights } = require("../../utils/db-requests/fight-request")
 
 export default async function handler(req, res) {
     // switch the methods
@@ -16,24 +17,20 @@ export default async function handler(req, res) {
             return updateFight(req, res);
         }
 
-        // case 'DELETE': {
-        //     return deleteChar(req, res);
-        // }
+        case 'DELETE': {
+            return deleteFight(req, res);
+        }
     }
 };
 
 async function getFights(req,res){
     try {
-        // connect to the database
-        let { db } = await connectToDatabase();
-        // fetch the posts
-        let rounds = await db
-            .collection('fights')
-            .find({})
-            .toArray();
+        
+        let fights = await fetchAllFights();
+
         // return the posts
         return res.json({
-            data: JSON.parse(JSON.stringify(rounds)),
+            data: JSON.parse(JSON.stringify(fights)),
             success: true,
         });
     } catch (error) {
@@ -49,7 +46,6 @@ async function addFight(req, res) {
     try {
         // connect to the database
         let { db } = await connectToDatabase();
-        console.log(req.body);
         await db.collection('fights').update(req.body, {$setOnInsert: {fight_name: req.body.fight_name}}, {upsert: true});
         // return a message
         return res.json({
@@ -86,6 +82,37 @@ async function updateFight(req, res) {
     } catch (error) {
 
         // return an error
+        return res.json({
+            data: new Error(error).message,
+            success: false,
+        });
+    }
+};
+
+async function deleteFight(req, res) {
+    try {
+        // Connecting to the database
+        let { db } = await connectToDatabase();
+
+        // Deleting the char
+        await db.collection('fights').deleteOne({
+            _id: new ObjectId(req.body._id)
+        });
+
+
+        // Deleting the char rounds
+        await db.collection('rounds').deleteMany(
+            {fight_id: req.body._id}
+        );
+
+        // // returning a message
+        return res.json({
+            data: `Fight ${req.body.fight_name} deleted successfully`,
+            success: true,
+        });
+    } catch (error) {
+
+        // returning an error
         return res.json({
             data: new Error(error).message,
             success: false,

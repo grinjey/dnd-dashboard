@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { ButtonGroup } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const RoundSelectDropdown = ({fight, setRound}) => {
 
@@ -18,19 +18,19 @@ const RoundSelectDropdown = ({fight, setRound}) => {
     );
 
     return (
-        <DropdownButton
-        title="Select Round"
-        id="dropdown-menu-align-right"
-        variant='dark'
-        size='sm'
-        onSelect={handleSelect}
-        >
-        { roundsToFill.length > 0 ? 
-        (roundsToFill.map((r) => <Dropdown.Item key={r} eventKey={r}> {r} </Dropdown.Item>)) : 
-        (<div className='d-flex justify-content-center'>No Rounds...</div>)
-        
-        }
-        </DropdownButton>
+
+        <Dropdown as={ButtonGroup} onSelect={(e) => {handleSelect(e)}}>
+            <Dropdown.Toggle className="btn-dark btn-sm" id="select-round">Select Round</Dropdown.Toggle>
+            <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
+
+                { roundsToFill.length > 0 ? 
+                    (roundsToFill.map((r) => <Dropdown.Item key={r} eventKey={r}> {r} </Dropdown.Item>)) : 
+                    (<div className='d-flex justify-content-center'>No Rounds...</div>)
+                }
+
+            </Dropdown.Menu>
+        </Dropdown>
+
     );
 };
 

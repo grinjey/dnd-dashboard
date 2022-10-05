@@ -1,9 +1,48 @@
 import Stack from "react-bootstrap/Stack";
 import PlayerNavDropdown from "../dropdown/player-nav-dropdown";
-import { FormModalContainer } from "../modal";
+import { FormModalContainer } from "../modal/modal";
 import { PlayerAddForm, PlayerRemoveForm } from "../forms";
+import { useState } from "react";
+import { charCreate, charRemove } from "../../api/chars-api";
 
-const PlayerDashboardTitle = ({ setName, setPlayerClass, handleCharSubmit, handleCharRemoveSubmit, }) => {
+const PlayerDashboardTitle = ({ chars, fetchChars }) => {
+
+    const [name, setName] = useState('');
+
+    const handleCharCreate = async () => {
+        await charCreate(name);
+        await fetchChars();
+        
+    };
+
+    const handleCharSubmit = async (event) => {
+        event.preventDefault();
+        // Check if all fields are filled
+        if (name.length > 0) {
+            await handleCharCreate()
+    
+          // Reset all input fields
+        setName('');
+        }
+    };
+
+    const handleCharRemove = async (id, name) => {
+
+        // Send DELETE request to '/api/chars' endpoint
+        await charRemove(id, name);
+        await fetchChars();
+    };
+
+    const handleCharRemoveSubmit = async (event) => {
+        event.preventDefault();
+        if (name.length > 0) {
+            const charsToRemove = chars.filter(el => (el.name === name));
+            for (let i=0; i < charsToRemove.length; i++) {
+                await handleCharRemove(charsToRemove[i]._id, charsToRemove[i].name);
+            }
+            setName('');
+        }
+    };
 
     return (
         <Stack direction="horizontal">
@@ -13,7 +52,6 @@ const PlayerDashboardTitle = ({ setName, setPlayerClass, handleCharSubmit, handl
                     form={ <PlayerAddForm 
                         handleSubmit={handleCharSubmit} 
                         setName={setName} 
-                        setPlayerClass={setPlayerClass} 
                         formId="playerAdd"/>} 
                     formId="playerAdd"/>}
                 removeModal={<FormModalContainer 
@@ -21,7 +59,6 @@ const PlayerDashboardTitle = ({ setName, setPlayerClass, handleCharSubmit, handl
                     form={ <PlayerRemoveForm 
                         handleSubmit={handleCharRemoveSubmit} 
                         setName={setName} 
-                        setPlayerClass={setPlayerClass} 
                         formId="playerRemove"/>} 
                     formId="playerRemove"/>}
             />

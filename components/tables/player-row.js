@@ -1,20 +1,38 @@
 import { Cell } from "../cell/cell";
 import CellSubmit from '../cell/cell-with-submit';
-import Stack from 'react-bootstrap/Stack';
 import Timer from '../timer/timer';
+import { useState } from "react";
 
 
-export const PlayersListRow = (props) => {
+export const PlayersListRow = ({char, initiative, handleInitiative, handleDamageOutput, handleDamageTaken, handleUpdateTime}) => {
+
+  const [damageOutput, setDamageOutput] = useState(null);
+  const [damageTaken, setDamageTaken] = useState(null);
+
+  const submitDamageOutput = async () => {
+    if (damageOutput !== null && damageOutput !== undefined && damageOutput !== '') {
+
+      await handleDamageOutput({char, damageOutput});
+    }
+    setDamageOutput(null);
+    
+  };
+
+  const submitDamageTaken = async () => {
+    if (damageTaken !== null && damageTaken !== undefined && damageTaken !== '') {
+      await handleDamageTaken({char, damageTaken});
+    }
+    setDamageTaken(null);
+  }
 
   return (
 
     <tr className='bg-secondary align-middle fw-bold text-black text-center'>
-      <td><span>{props.char.name}</span></td>
-      <td><span><div>{props.char.playerclass}</div></span></td>
-      <td><span><Cell value={props.initiative} onChange={(e) => props.handleInitiative(e, props.char._id)}/></span></td>
-      <td><span><CellSubmit value={props.char.damage_output} onChange={props.setDamageOutput} onSubmit={() => props.handleDamageOutput(props.char)}/></span></td>
-      <td><span><CellSubmit value={props.char.damage_taken} onChange={props.setDamageTaken} onSubmit={() => props.handleDamageTaken(props.char)}/></span></td>
-      <td><Timer onSubmit={props.handleUpdateTime} char={props.char}></Timer></td>
+      <td><span>{char.name}</span></td>
+      <td><span><Cell value={initiative} onChange={(e) => handleInitiative(e, char._id)}/></span></td>
+      <td><span><CellSubmit value={char.damage_output} editValue={damageOutput} onChange={setDamageOutput} onSubmit={() => submitDamageOutput()}/></span></td>
+      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => submitDamageTaken()}/></span></td>
+      <td><Timer onSubmit={handleUpdateTime} char={char}></Timer></td>
         
 
   </tr>

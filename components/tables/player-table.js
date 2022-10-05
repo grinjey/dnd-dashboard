@@ -1,157 +1,30 @@
 import {useState, useEffect, useCallback} from "react";
 import PlayerList from "../tables/player-list";
 import FightOptions from "../dashboard/fight-options";
-import { addBatchRounds } from "../../api/rounds-api";
-import { getFightsAll, addFight, addFightRound } from "../../api/fights-api";
 
-const PlayerTable = ({chars, rounds, fetchRounds}) => {
+const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
 
     const [fight, setFight] = useState({});
-    const [fights, setFights] = useState([]);
-    const [fightToCreate, setFightToCreate] = useState('');
-    const [createdFight, setCreatedFight] = useState('');
     const [round, setRound] = useState(0);
     const [roundsToUse, setRoundsToUse] = useState([])
 
     useEffect(() => {
-        fetchFights();
-    }, []
-    );
-
-    const selectNewFight = useCallback(() => {
-        if (createdFight.length > 0) {
-            console.log("selecting new fight")
-            const newFight = fights.find((item) => item.fight_name === createdFight);
-            if (newFight !== undefined) {
-                console.log(newFight);
-                setFight(newFight);
-                setRound(Number(newFight.rounds));
-                setCreatedFight('');
-            }
-        }
-        
-    }, [fights, createdFight]
-    );
-
-    useEffect(() => {
-        
-        const updateFight = () => {
-            if (fight._id !== undefined) {
-                console.log("updating fights")
-                const selectedFight = fights.find((item) => item._id === fight._id);
-                setFight(selectedFight);
-                setRound(Number(selectedFight.rounds));
-            } 
-        }
-
-        updateFight();
-        selectNewFight();
-        
-    }, [fights, fight._id, selectNewFight]
-    );
-
-    useEffect(() => {
 
         const buildRoundsToUse = () => {
-            if (round !== 0) {
+            if (round !== 0 && fight._id !== undefined) {
                 console.log("updating rounds to use")
-                let currentRounds = rounds.filter(function(roundInfo) {return roundInfo.round_id === round})
+                let currentRounds = rounds.filter(function(roundInfo) {return roundInfo.round_id === round && roundInfo.fight_id === fight._id})
                 setRoundsToUse(currentRounds);
+            } else {
+                setRoundsToUse([])
             }
         };
 
         buildRoundsToUse();
 
-    }, [rounds, round]
-    )
+    }, [rounds, round, fight]
+    );
 
-    
-
-    // const fetchRounds = useCallback(async () => {
-
-    //     if (fight._id !== undefined && round !== undefined) {
-    //         const fight_id = fight._id;
-    //         const round_id = Number(round);
-    //         const roundsInfo = await getRounds(fight_id, round_id);
-    //         setRounds(roundsInfo.data);
-    //     };
-    // }, [fight, round]
-    // )
-
-    // useEffect(() => {
-
-    //     fetchRounds();
-
-    // }, [round, fight, fetchRounds]
-    // );
-
-    const fetchFights = async () => {
-        
-        const fightData = await getFightsAll();
-        setFights(fightData.data);
-    };
-
-    const submitFightAdd = async () => {
-        await addFight(fightToCreate);
-        await fetchFights();
-    }
-
-    const handleFightAdd = async (event) => {
-        event.preventDefault();
-        console.log(fights);
-        if (fightToCreate.length > 0) {
-            if (fights.find((item) => item.fight_name === fightToCreate) === undefined) {
-                await submitFightAdd();
-                setCreatedFight(fightToCreate);
-                setFightToCreate('');
-
-            } else {
-                console.log("Fight already created");
-            }
-        };
-    };
-
-    const handleBatchRoundInsert = async (fightId, roundId) => {
-        const collection = [];
-
-        for (let i = 0; i < chars.length; i++) {
-            collection.push({
-                fight_id: fightId,
-                round_id: roundId,
-                char_id: chars[i]._id,
-                damage_output: 0,
-                damage_taken: 0
-            })
-        }
-
-        console.log(collection);
-
-        return await addBatchRounds(collection);
-
-    }
-
-    const handleCreateNewFightRound = async (newRounds) => {
-        const fight_id = fight._id;
-        await addFightRound(fight_id, newRounds)
-    }
-
-    const createNewRound = async () => {
-        if (fight._id !== undefined) {
-            const fightId = fight._id;
-            const newRounds = fight.rounds + 1;
-            const roundId = Number(newRounds);
-            await handleCreateNewFightRound(roundId);
-            await handleBatchRoundInsert(fightId, roundId);
-            await fetchFights();
-        }
-    }
-
-    const selectFight = (FightId) => {
-        const convFightId = FightId;
-        const selectedFight = fights.find((item) => item._id === convFightId);
-        setFight(selectedFight);
-        setRound(Number(selectedFight.rounds));
-    };
 
     return (
         <>
@@ -160,10 +33,9 @@ const PlayerTable = ({chars, rounds, fetchRounds}) => {
             fights={fights}
             round={round}
             setRound={setRound}
-            selectFight={selectFight}
-            setFightToCreate={setFightToCreate}
-            handleFightAdd={handleFightAdd}
-            createNewRound={createNewRound}
+            setFight={setFight}
+            fetchFights={fetchFights}
+            fetchRounds={fetchRounds}
             />
         <PlayerList chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fight={fight}/>
         </>

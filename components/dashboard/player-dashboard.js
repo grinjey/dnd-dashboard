@@ -1,30 +1,19 @@
 import React, {useState, useEffect, useCallback} from "react";
 import Card from "react-bootstrap/Card";
+import Stack from "react-bootstrap/Stack";
 import PlayerDashboardTitle from "../title/player-dasboard-title";
 import PlayerTable from "../tables/player-table";
 import { PlayerStatTable } from "../tables/player-stat-table";
-import { charCreate, getCharsAll, charRemove } from "../../api/chars-api";
+import { getCharsAll } from "../../api/chars-api";
 import { getRounds } from "../../api/rounds-api";
-import { Stack } from "react-bootstrap";
+import { getFightsAll } from "../../api/fights-api";
 
 
-export const PlayerDashboard = ({loadedChars, loadedRounds}) => {
+export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
 
-    const [chars, setChars] = useState([]);
-    const [name, setName] = useState('');
-    const [rounds, setRounds] = useState([]);
-    const [playerclass, setPlayerClass] = useState('');
-
-    useEffect(() => {
-        setChars(loadedChars)
-        setRounds(loadedRounds);
-    }, []
-    );
-
-    const fetchRounds = async () => {
-        const roundsInfo = await getRounds();
-        setRounds(roundsInfo.data);
-    }
+    const [chars, setChars] = useState(loadedChars);
+    const [rounds, setRounds] = useState(loadedRounds);
+    const [fights, setFights] = useState(loadedFights);
 
     useEffect(() => {
         
@@ -45,71 +34,31 @@ export const PlayerDashboard = ({loadedChars, loadedRounds}) => {
         
     };
 
-    const handleInputsReset = () => {
-        setName('');
-        setPlayerClass('');
-    };
+    const fetchRounds = async () => {
+        console.log(`fetching rounds.`)
+        const roundsInfo = await getRounds();
+        setRounds(roundsInfo.data);
+    }
 
-    const handleCharCreate = async () => {
-        await charCreate(name, playerclass);
-        await fetchChars();
-        
-    };
-
-    const handleCharSubmit = async (event) => {
-        event.preventDefault();
-        // Check if all fields are filled
-        if (name.length > 0 && playerclass.length > 0) {
-            await handleCharCreate()
-    
-          // Reset all input fields
-          handleInputsReset()
-        }
-    };
-
-    const handleCharRemove = async (id, name) => {
-
-        // Send DELETE request to '/api/chars' endpoint
-        await charRemove(id, name);
-        await fetchChars();
-    };
-
-    const handleCharRemoveSubmit = async (event) => {
-        event.preventDefault();
-        console.log(chars);
-        if (name.length > 0 && playerclass.length > 0) {
-            const charsToRemove = chars.filter(el => (el.name === name && el.playerclass === playerclass));
-            for (let i=0; i < charsToRemove.length; i++) {
-                await handleCharRemove(charsToRemove[i]._id, charsToRemove[i].name);
-            }
-            handleInputsReset();
-        }
+    const fetchFights = async () => {
+        console.log("fetching fights");
+        const fightData = await getFightsAll();
+        setFights(fightData.data);
     };
 
     return (
             <Stack gap={3} direction="horizontal" className="d-flex justify-content-center">
                 <Card border="" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
                 <Card.Title className="fw-bold text-start ps-3 py-2">
-                    <PlayerDashboardTitle 
-                        setName={setName}
-                        setPlayerClass={setPlayerClass}
-                        handleCharSubmit={handleCharSubmit}
-                        handleCharRemoveSubmit={handleCharRemoveSubmit}/>
+                    <PlayerDashboardTitle chars={chars} fetchChars={fetchChars}/>
                 </Card.Title>
                 <Card.Body>
-                    {chars !== undefined ? <PlayerTable chars={chars} rounds={rounds} fetchRounds={fetchRounds}/> :
+                    {chars !== undefined ? <PlayerTable chars={chars} rounds={rounds} fetchRounds={fetchRounds} fights={fights} fetchFights={fetchFights}/> :
                     <div className="fw-bold"> Warning: There was an issue loading character data.</div>
                     } 
                 </Card.Body>
                 </Card>
-                <Card border="" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
-                    <Card.Title className="text-center fw-bold px-3 py-2">
-                        <div className="text-white">Player Statistics</div>
-                    </Card.Title>
-                    <Card.Body>
-                        <PlayerStatTable chars={chars} rounds={rounds}></PlayerStatTable>
-                    </Card.Body>
-                </Card>
+                <PlayerStatTable chars={chars} rounds={rounds} fights={fights}></PlayerStatTable>
             </Stack>
         
         

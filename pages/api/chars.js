@@ -47,7 +47,7 @@ async function addChar(req, res) {
         // connect to the database
         let { db } = await connectToDatabase();
         // add the post
-        await db.collection('chars').update(req.body, {$setOnInsert: {name: req.body.name, playerclass: req.body.playerclass}}, {upsert: true});
+        await db.collection('chars').updateOne(req.body, {$setOnInsert: {name: req.body.name}}, {upsert: true});
         // return a message
         return res.json({
             data: `Char ${req.body} added successfully`,

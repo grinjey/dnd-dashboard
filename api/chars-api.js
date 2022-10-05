@@ -14,15 +14,14 @@ export async function getCharsAll() {
 
 };
 
-export async function charCreate(name, playerclass) {
+export async function charCreate(name) {
     
     try {
-        console.log(`Creating Char: ${name}, ${playerclass}`);
+        console.log(`Creating Char: ${name}`);
 
         const response = await axios
             .post('/api/chars', {
-                name: name, 
-                playerclass: playerclass
+                name: name
             });
     
         console.log(response);

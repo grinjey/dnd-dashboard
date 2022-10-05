@@ -17,9 +17,9 @@ export default async function handler(req, res) {
             return addRound(req, res);
         }
 
-        // case 'DELETE': {
-        //     return deleteChar(req, res);
-        // }
+        case 'DELETE': {
+            return deleteRound(req, res);
+        }
     }
 };
 
@@ -70,16 +70,6 @@ async function addRound(req, res) {
 
 async function getRounds(req,res){
     try {
-        // connect to the database
-        let { db } = await connectToDatabase();
-        // fetch the posts
-
-        // const round_id = Number(req.query.round_id)
-
-        // const query = [
-        //     {fight_id: req.query.fight_id},
-        //     {round_id: round_id}
-        // ];
 
         let rounds = await fetchAllRounds();
 
@@ -131,11 +121,51 @@ async function updateRound(req, res) {
             });
         }
 
-        
-        
     } catch (error) {
 
         // return an error
+        return res.json({
+            data: new Error(error).message,
+            success: false,
+        });
+    }
+};
+
+const deleteRound = async (req, res) => {
+    try {
+        // Connecting to the database
+        let { db } = await connectToDatabase();
+
+        const new_rounds = req.body.round_id - 1;
+
+        if (new_rounds < 0) {
+            return res.json({
+                data: `Cannot delete round for fight: ${req.body.fight_id} No rounds to delete.`,
+                success: true,
+            });
+        }
+
+        // Deleting the char
+        await db.collection('rounds').deleteMany({
+            fight_id: req.body.fight_id,
+            round_id: req.body.round_id
+        });
+
+
+        // Deleting the char rounds
+        await db.collection('fights').updateOne(
+            {_id: new ObjectId(req.body.fight_id)},
+            { $set: {rounds : new_rounds} }
+        );
+
+        // // returning a message
+        return res.json({
+            data: `Fight ${req.body.fight_name} deleted successfully`,
+            success: true,
+        });
+    } catch (error) {
+
+        // returning an error
         return res.json({
             data: new Error(error).message,
             success: false,

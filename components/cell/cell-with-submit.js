@@ -13,9 +13,17 @@ export const CellSubmit = ({value, onChange, onSubmit}) => {
         setEditing(false);
     }
 
+    // const onClick = () => {
+    //     onSubmit();
+    //     // setEditing(false);
+    // }
+
     return (
         editing ?
-            <input className="bg-secondary text-black fw-bold" type="text" onChange={(e) => onChange(e.target.value)} onBlur={() => onBlur()} /> : 
+            <span className="d-flex align-center">
+                <input className="bg-secondary text-black fw-bold" type="number" onChange={(e) => onChange(e.target.value)} onBlur={() => onBlur()} />
+            </span>
+             : 
             <div onClick={() => onFocus()}>{value !== undefined ? value : "-"}</div>
     );
 
