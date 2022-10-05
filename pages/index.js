@@ -1,42 +1,40 @@
 import { Container } from "react-bootstrap";
 import { PlayerDashboard } from "../components/dashboard/player-dashboard.js";
-import { fetchAllChars } from "../utils/db-requests/char-requests.js";
-import { fetchAllRounds } from "../utils/db-requests/round-requests.js";
-import { fetchAllFights } from "../utils/db-requests/fight-request.js";
-
-export async function getServerSideProps(context) {
-
-    let chars;
-    let rounds;
-    let fights;
-
-    try {
-        chars = await fetchAllChars();
-        rounds = await fetchAllRounds();
-        fights = await fetchAllFights();
-    } 
-    catch (error) {
-        console.log("There was an error loading server side props: ", error);
-    }
-
-    // fetch the chars
-    if (chars, rounds, fights) {
-        let loadedChars = JSON.parse(JSON.stringify(chars));
-        let loadedRounds = JSON.parse(JSON.stringify(rounds));
-        let loadedFights = JSON.parse(JSON.stringify(fights));
-
-        return {
-            props: {loadedChars: loadedChars, loadedRounds: loadedRounds, loadedFights: loadedFights}, // will be passed to the page component as props
-          }
-    } else {
-        return {
-            notFound: true,
-        }
-    } 
-};
 
 
-export default function App({ loadedChars, loadedRounds, loadedFights }) {
+// export async function getServerSideProps(context) {
+
+//     let chars;
+//     let rounds;
+//     let fights;
+
+//     try {
+//         chars = await fetchAllChars();
+//         rounds = await fetchAllRounds();
+//         fights = await fetchAllFights();
+//     } 
+//     catch (error) {
+//         console.log("There was an error loading server side props: ", error);
+//     }
+
+//     // fetch the chars
+//     if (chars, rounds, fights) {
+//         let loadedChars = JSON.parse(JSON.stringify(chars));
+//         let loadedRounds = JSON.parse(JSON.stringify(rounds));
+//         let loadedFights = JSON.parse(JSON.stringify(fights));
+
+//         return {
+//             props: {loadedChars: loadedChars, loadedRounds: loadedRounds, loadedFights: loadedFights}, // will be passed to the page component as props
+//           }
+//     } else {
+//         return {
+//             notFound: true,
+//         }
+//     } 
+// };
+
+
+export default function App() {
 
     return (
         <div style={{backgroundColor : 'black', height : "150vh"}}>
@@ -48,7 +46,7 @@ export default function App({ loadedChars, loadedRounds, loadedFights }) {
         </div>
 
         <div className="d-flex justify-content-center">
-            <PlayerDashboard loadedChars={loadedChars} loadedRounds={loadedRounds} loadedFights={loadedFights}/>
+            <PlayerDashboard/>
         </div>
         
         

@@ -19,7 +19,6 @@ const Timer = ({onSubmit, char}) => {
     
     function submitTime() {
         if (seconds !== 0) {
-            console.log(seconds);
             onSubmit({char, seconds})
         }
         

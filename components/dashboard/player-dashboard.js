@@ -9,11 +9,18 @@ import { getRounds } from "../../requests/rounds-api";
 import { getFightsAll } from "../../requests/fights-api";
 
 
-export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
+export const PlayerDashboard = () => {
 
-    const [chars, setChars] = useState(loadedChars);
-    const [rounds, setRounds] = useState(loadedRounds);
-    const [fights, setFights] = useState(loadedFights);
+    const [chars, setChars] = useState([]);
+    const [rounds, setRounds] = useState([]);
+    const [fights, setFights] = useState([]);
+
+    useEffect(() => {
+        fetchChars();
+        fetchFights();
+        fetchRounds();
+    },[]
+    )
 
     useEffect(() => {
         

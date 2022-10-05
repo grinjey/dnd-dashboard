@@ -172,8 +172,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             </thead>
             <tbody>
                 {charsToUse.length > 0 ? (
-                    charsToUse.map((char) => (
-                            <PlayersListRow key={char._id}
+                    charsToUse.map((char, i) => (
+                            <PlayersListRow key={i}
                                 char={char}
                                 initiative={playerInitiatives[char._id]}
                                 handleInitiative={handleInitiative}
