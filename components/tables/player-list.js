@@ -95,6 +95,15 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
     // }
 
     const handleDamageOutput = async ({char, damageOutput}) => {
+
+        console.log("--TEST--")
+        console.log("Char: ")
+        console.log(char);
+        console.log(damageOutput);
+
+        console.log(fight._id);
+        console.log(round);
+
         if (char.damage_output !== undefined && char.damage_taken !== undefined && damageOutput !== undefined && fight._id !== undefined && round !== 0) {
 
             const update = {
