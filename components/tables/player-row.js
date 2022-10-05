@@ -5,24 +5,16 @@ import { useState } from "react";
 import axios from "axios";
 
 
-export const PlayersListRow = ({char, initiative, handleInitiative, handleDamageOutput, handleDamageTaken, fetchRounds}) => {
+export const PlayersListRow = ({char, initiative, handleInitiative, handleDamageOutput, handleDamageTaken, fetchRounds, setDamageOutput, setDamageTaken}) => {
 
-  const [damageOutput, setDamageOutput] = useState(null);
-  const [damageTaken, setDamageTaken] = useState(null);
 
-  const submitDamageOutput = async () => {
-    if (damageOutput !== null && damageOutput !== undefined && damageOutput !== '') {
+  // const submitDamageOutput = async () => {
+  //     await handleDamageOutput({char});
+  // };
 
-      await handleDamageOutput({char, damageOutput});
-    }
-    
-  };
-
-  const submitDamageTaken = async () => {
-    if (damageTaken !== null && damageTaken !== undefined && damageTaken !== '') {
-      await handleDamageTaken({char, damageTaken});
-    }
-  }
+  // const submitDamageTaken = async () => {
+  //     await handleDamageTaken({char});
+  // }
 
   const handleUpdateTime = async ({char, seconds}) => {
 
@@ -51,8 +43,8 @@ export const PlayersListRow = ({char, initiative, handleInitiative, handleDamage
     <tr className='bg-secondary align-middle fw-bold text-black text-center'>
       <td><span>{char.name}</span></td>
       <td><span><Cell value={initiative} onChange={(e) => handleInitiative(e, char._id)}/></span></td>
-      <td><span><CellSubmit value={char.damage_output} editValue={damageOutput} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span></td>
-      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={submitDamageTaken}/></span></td>
+      <td><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={() => handleDamageOutput({char})}/></span></td>
+      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => handleDamageTaken({char})}/></span></td>
       <td><Timer onSubmit={handleUpdateTime} char={char}></Timer></td>
         
 
