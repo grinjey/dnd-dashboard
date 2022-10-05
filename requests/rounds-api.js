@@ -46,13 +46,15 @@ export async function addBatchRounds(collection) {
     
 };
 
-export async function updateDamage(update) {
+export async function updateDamage({update}) {
     try {
-        console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_Taken}`);
-        const response = await axios
-            .put('/api/rounds', update);
-    
-        console.log(response.data);
+        console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output ? update.damage_output : update.damage_taken}`);
+        // const response = await axios
+        //     .put('/api/rounds', update);
+
+        const response = await fetch('/api/rounds', {method: 'PUT', body: JSON.stringify(update)});
+        const data = await response.json();
+        console.log(data);
     } 
     catch (error) {
         console.error(`There was an error updating damage for char: ${update.char_id} 

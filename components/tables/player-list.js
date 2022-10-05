@@ -108,7 +108,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             damage_output: eval(damageOutput),
         }
 
-        await updateDamage(update);
+        await updateDamage({update});
     };
 
     const handleDamageTaken = async ({char, damageTaken}) => {
@@ -133,7 +133,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             damage_taken: eval(damageTaken),
         }
 
-        await updateDamage(update);
+        await updateDamage({update});
     };
 
     const handleUpdateTime = async ({char, seconds}) => {
