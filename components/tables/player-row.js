@@ -32,7 +32,7 @@ export const PlayersListRow = ({char, initiative, handleInitiative, handleDamage
       <td><span><Cell value={initiative} onChange={(e) => handleInitiative(e, char._id)}/></span></td>
       <td><span><CellSubmit value={char.damage_output} editValue={damageOutput} onChange={setDamageOutput} onSubmit={() => submitDamageOutput()}/></span></td>
       <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => submitDamageTaken()}/></span></td>
-      <td><Timer onSubmit={handleUpdateTime} char={char}></Timer></td>
+      {/* <td><Timer onSubmit={handleUpdateTime} char={char}></Timer></td> */}
         
 
   </tr>
