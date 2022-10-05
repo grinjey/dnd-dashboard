@@ -101,8 +101,8 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
                 fight_id: fightId,
                 round_id: roundId,
                 char_id: chars[i]._id,
-                damage_output: 0,
-                damage_taken: 0
+                damage_output: null,
+                damage_taken: null
             })
         }
 
@@ -123,7 +123,7 @@ const FightOptions = ({fight, fights, round, setRound, setFight, fetchFights, fe
             const newRounds = fight.rounds + 1;
             const roundId = Number(newRounds);
             await handleCreateNewFightRound(roundId);
-            // await handleBatchRoundInsert(fightId, roundId);
+            await handleBatchRoundInsert(fightId, roundId);
             await fetchFights();
             await fetchRounds();
         }
