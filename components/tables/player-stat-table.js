@@ -144,8 +144,8 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
                 <tbody>
                     {charDprs.length > 0 ? (
                         charDprs.map((dpr) => (
-                            <tr key={dpr.name} className='bg-secondary fw-bold text-black text-center'>
-                                <td><span>{dpr.name}: </span></td>
+                            <tr key={dpr.name} className='bg-secondary fw-bold text-black text-center border-dark'>
+                                <td className="border border-right border-dark"><span>{dpr.name}: </span></td>
                                 <td><span>{dpr.dopr ? dpr.dopr : 0}</span></td>
                                 <td><span>{dpr.dtpr ? dpr.dtpr : 0}</span></td>
                                 <td><span>{dpr.tpr ? dpr.tpr : 0}s</span></td>

@@ -1,4 +1,6 @@
 let statusList = {
+    Prone: false,
+    Restrained: false,
     Blinded: false,
     Charmed: false,
     Frightened: false,
@@ -7,19 +9,41 @@ let statusList = {
     Paralyzed: false,
     Poisoned: false,
     Stunned: false,
-    Unconscious: false
+    Unconscious: false,
+    Exhausted: false,
+    Incapacitated: false
   };
 
 let statusColors = {
-    Blinded: "primary",
-    Charmed: "secondary",
-    Frightened: "success",
-    Grappled: "danger",
+    Prone: "#008b8b",
+    Restrained: "#006400",
+    Blinded: "#c0c0c0",
+    Charmed: "#ff69b4",
+    Frightened: "#800080",
+    Grappled: "#a52a2a",
     Invisible: "warning",
-    Paralyzed: "info",
-    Poisoned: "dark",
-    Stunned: "light",
-    Unconscious: "white"
+    Paralyzed: "#ffff00",
+    Poisoned: "#9acd32",
+    Stunned: "#ffd700",
+    Unconscious: "#000000",
+    Exhausted: "#dc143c",
+    Incapacitated: "#f8f8ff"
     };
 
-export {statusList, statusColors};
+  let statusTextColors = {
+    Prone: "white",
+    Restrained: "white",
+    Blinded: "black",
+    Charmed: "white",
+    Frightened: "white",
+    Grappled: "white",
+    Invisible: "warning",
+    Paralyzed: "black",
+    Poisoned: "white",
+    Stunned: "black",
+    Unconscious: "white",
+    Exhausted: "white",
+    Incapacitated: "black"
+    };
+
+export {statusList, statusColors, statusTextColors};

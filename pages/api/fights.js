@@ -1,6 +1,6 @@
 const { connectToDatabase } = require('../../utils/mongodb');
 const ObjectId = require('mongodb').ObjectId;
-const { fetchAllFights } = require("../../utils/db-requests/fight-request")
+const { fetchAllFights } = require("../../utils/db-requests/fight-requests")
 
 export default async function handler(req, res) {
     // switch the methods
@@ -102,6 +102,11 @@ async function deleteFight(req, res) {
 
         // Deleting the char rounds
         await db.collection('rounds').deleteMany(
+            {fight_id: req.body._id}
+        );
+
+        // Deleting the char initiatives
+        await db.collection('initiative').deleteMany(
             {fight_id: req.body._id}
         );
 

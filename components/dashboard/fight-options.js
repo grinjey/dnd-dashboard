@@ -9,7 +9,7 @@ import { addFight, addFightRound, deleteFight} from "../../requests/fights-api";
 import { addBatchRounds, deleteRound } from "../../requests/rounds-api";
 
 
-const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFights, fetchRounds}) => {
+const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFights, fetchRounds, fetchInitiatives}) => {
     
     const [fightToCreate, setFightToCreate] = useState('');
     const [createdFight, setCreatedFight] = useState('');
@@ -75,6 +75,7 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
             setRound(0);
             await fetchFights();
             await fetchRounds();
+            await fetchInitiatives();
             
         } else {
             console.log("Cannot delete fight if none selected.")
@@ -145,7 +146,7 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
                 <div className="d-flex flex-row justify-content-around">
                         <div className="text-black">
                             <span className=""> Current Fight: </span>
-                            <span style={{paddingLeft: "5px", color: "#7fffd4"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
+                            <span className="fw-bold" style={{paddingLeft: "5px", color: "#8b008b"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
                         </div>
                         <div className="text-black">
                             <span> Current Round: </span>

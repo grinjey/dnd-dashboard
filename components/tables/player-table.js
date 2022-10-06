@@ -2,7 +2,7 @@ import {useState, useEffect, useCallback} from "react";
 import PlayerList from "../tables/player-list";
 import FightOptions from "../dashboard/fight-options";
 
-const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
+const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRounds, fetchInitiatives}) => {
 
     const [fight, setFight] = useState({});
     const [round, setRound] = useState(0);
@@ -14,7 +14,16 @@ const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
             if (round !== 0 && fight._id !== undefined) {
                 console.log("updating rounds to use")
                 let currentRounds = rounds.filter(function(roundInfo) {return roundInfo.round_id === round && roundInfo.fight_id === fight._id})
-                setRoundsToUse(currentRounds);
+                let currentInitiatives = initiatives.filter(function(initiative) {return initiative.fight_id === fight._id})
+
+                let hash = new Map();
+                currentInitiatives.concat(currentRounds).forEach(obj => {
+                    hash.set(obj.char_id, Object.assign( hash.get(obj.char_id) || {}, obj ))
+                });
+
+                let currentRoundsWithInitiatives = Array.from(hash.values());
+                setRoundsToUse(currentRoundsWithInitiatives);
+
             } else {
                 setRoundsToUse([])
             }
@@ -22,7 +31,7 @@ const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
 
         buildRoundsToUse();
 
-    }, [rounds, round, fight]
+    }, [rounds, initiatives, round, fight]
     );
 
 
@@ -37,8 +46,9 @@ const PlayerTable = ({chars, rounds, fetchRounds, fights, fetchFights}) => {
             setFight={setFight}
             fetchFights={fetchFights}
             fetchRounds={fetchRounds}
+            fetchInitiatives={fetchInitiatives}
             />
-        <PlayerList chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fight={fight}/>
+        <PlayerList chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fight={fight} fetchInitiatives={fetchInitiatives}/>
         </>
     );
 

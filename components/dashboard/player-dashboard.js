@@ -7,13 +7,16 @@ import { PlayerStatTable } from "../tables/player-stat-table";
 import { getCharsAll } from "../../requests/chars-api";
 import { getRounds } from "../../requests/rounds-api";
 import { getFightsAll } from "../../requests/fights-api";
+import { getInitsAll } from "../../requests/initiative-api";
 
 
-export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
+
+export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights, loadedInitiatives}) => {
 
     const [chars, setChars] = useState(loadedChars);
     const [rounds, setRounds] = useState(loadedRounds);
     const [fights, setFights] = useState(loadedFights);
+    const [initiatives, setInitiatives] = useState(loadedInitiatives)
 
     // useEffect(() => {
     //     fetchChars();
@@ -51,19 +54,24 @@ export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
     const fetchFights = async () => {
         console.log("fetching fights");
         const fightData = await getFightsAll();
+
         setFights(fightData.data);
+    };
+
+    const fetchInitiatives = async () => {
+        console.log("fetching initiatives");
+        const initData = await getInitsAll();
+        setInitiatives(initData.data);
     };
 
     return (
             <Stack gap={3} direction="horizontal" className="d-flex justify-content-center">
                 <Card border="" style={{backgroundColor : "#062206"}} className="table-wrapper table-responsive shadow-sm">
                 <Card.Title className="fw-bold text-start ps-3 py-2">
-                    <PlayerDashboardTitle chars={chars} fetchChars={fetchChars}/>
+                    <PlayerDashboardTitle chars={chars} fetchChars={fetchChars} fetchInitiatives={fetchInitiatives}/>
                 </Card.Title>
                 <Card.Body>
-                    {chars !== undefined ? <PlayerTable chars={chars} rounds={rounds} fetchRounds={fetchRounds} fights={fights} fetchFights={fetchFights}/> :
-                    <div className="fw-bold"> Warning: There was an issue loading character data.</div>
-                    } 
+                    <PlayerTable chars={chars} rounds={rounds} fights={fights} initiatives={initiatives} fetchRounds={fetchRounds} fetchFights={fetchFights} fetchInitiatives={fetchInitiatives}/>
                 </Card.Body>
                 </Card>
                 <PlayerStatTable chars={chars} rounds={rounds} fights={fights}></PlayerStatTable>

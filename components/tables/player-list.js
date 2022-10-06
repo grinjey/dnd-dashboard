@@ -4,7 +4,7 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { statusList} from "../../utils/statuses";
 
-const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
+const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}) => {
 
     const [playerInitiatives, setPlayerInitiatives] = useState({});
     const [charsToUse, setCharsToUse] = useState([]);
@@ -13,11 +13,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
         const mergeCharRounds = () => {
 
-            console.log("FIGHT: ")
-            console.log(fight)
-
             const map = new Map();
-            const props = ["damage_output", "damage_taken", "round_time", "round_id", "fight_id", "statuses"]
+            const props = ["damage_output", "damage_taken", "round_time", "round_id", "fight_id", "initiative"]
             chars.forEach(char => map.set(char._id, char));
             rounds.forEach(round => map.set(
                 round.char_id, 
@@ -25,16 +22,20 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                     ...Object.assign({}, ...props.map(prop => ({[prop]: round[prop]})))
                 }
             ));
+
+
             const merged = Array.from(map.values());
+
+            const sortedMerged = merged.sort((a, b) => b.initiative - a.initiative);
             
-            merged.forEach(char => {
-                if (!char.statuses) {
-                    char.statuses = statusList;
-                }
+            // merged.forEach(char => {
+            //     if (!char.statuses) {
+            //         char.statuses = statusList;
+            //     }
 
-            })
+            // })
 
-            return merged;
+            return sortedMerged;
         }
 
         // if (rounds.length > 0) {
@@ -57,19 +58,49 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
     }, [chars, rounds]
     );
 
-    const handleInitiative = (event, id) => {
-        const currentInitiatives = Object.assign({}, playerInitiatives);
-        const newInitiatives = Object.assign(currentInitiatives, {[id] : event});
-        setPlayerInitiatives(newInitiatives);
+    const handleInitiative = async ({fight_id, char_id, initiative}) => {
+
+        const update = {
+            fight_id: fight_id,
+            char_id: char_id,
+            initiative: eval(initiative)
+        };
+
+        console.log(update);
+
+        try {
+            console.log(`Updating initiative for char: ${update.char_id} for fight ${update.fight_id} to: ${update.initiative}`);
+            const response = await axios
+                .post('/api/initiative', update);
+    
+            console.log(response.data);
+        } 
+        catch (error) {
+            console.error(`There was an error updating damage for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
+
+        await fetchInitiatives();
+
+    }
+
+    // const handleInitiative = (event, id) => {
+    //     const currentInitiatives = Object.assign({}, playerInitiatives);
+    //     const newInitiatives = Object.assign(currentInitiatives, {[id] : event});
+    //     setPlayerInitiatives(newInitiatives);
+    // };
+
+    const sortCharsByName = () => {
+        const currentChars = charsToUse.slice();
+        currentChars.sort((a, b) => b.name.localeCompare(a.name));
+        setCharsToUse(currentChars);
     };
 
     const sortCharsByInitiative = () => {
         const currentChars = charsToUse.slice();
-        const updatedChars = currentChars.map((char) => 
-            Object.assign(char, { 'initiative': playerInitiatives[char._id]}));
-        updatedChars.sort((a, b) => b.initiative - a.initiative);
-        setCharsToUse(updatedChars);
-    };
+        currentChars.sort((a, b) => b.initiative - a.initiative);
+        setCharsToUse(currentChars);
+    }
 
     
     const handleDamage = async ({fight_id, round_id, char_id, damage_ouput, damage_taken}) => {
@@ -92,7 +123,7 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
             const response = await axios
                 .post('/api/rounds', update);
     
-            console.log(response);
+            console.log(response.data);
         } 
         catch (error) {
             console.error(`There was an error updating damage for char: ${update.char_id} 
@@ -108,8 +139,8 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
         <Table hover className="">
             <thead>
-                <tr className="text-center border-bottom text-secondary" >
-                    <th style={ { minWidth: "150px" } }>Name</th>
+                <tr className="text-center border-bottom border-dark text-secondary" >
+                    <th style={ { minWidth: "150px" } } role='button' onClick={sortCharsByName}>Name <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg> </th>
                     <th style={ { minWidth: "150px" } } role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
                     <th style={ { minWidth: "150px" } }>Damage Output</th>
                     <th style={ { minWidth: "150px" } }>Damage Taken</th>
@@ -124,7 +155,6 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                                 char={char}
                                 round={round}
                                 fight_id={fight._id}
-                                initiative={playerInitiatives[char._id]}
                                 handleInitiative={handleInitiative}
                                 handleDamage={handleDamage}
                                 fetchRounds={fetchRounds}

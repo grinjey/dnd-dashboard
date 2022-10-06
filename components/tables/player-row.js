@@ -5,14 +5,15 @@ import CellSubmit from '../cell/cell-with-submit';
 import CheckboxDropdown from "../dropdown/checkbox-dropdown";
 import Timer from '../timer/timer';
 import axios from "axios";
-import { statusColors, statusList } from "../../utils/statuses";
+import { statusColors, statusList, statusTextColors } from "../../utils/statuses";
 
 
 
-export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiative, handleDamage, fetchRounds}) => {
+export const PlayersListRow = ({char, round, fight_id, handleInitiative, handleDamage, fetchRounds}) => {
 
   const [damageOutput, setDamageOutput] = useState('');
   const [damageTaken, setDamageTaken] = useState('');
+  const [initiative, setInitiative] = useState(0);
   const [badges, setBadges] = useState(<div></div>)
   const [statuses, setStatuses] = useState({});
 
@@ -24,7 +25,8 @@ export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiat
       Object.keys(statuses).forEach(key => {if (statuses[key]) activeStatuses.push(key);})
   
       let newBadges = activeStatuses.map(status => {
-        return <Badge key={status} bg={statusColors[status]}>{status}</Badge>
+        // return <Badge key={status} style={{backgroundColor: statusColors[status]}} >{status}</Badge>
+        return <span className="badge" style={{backgroundColor: statusColors[status], color: statusTextColors[status]}}>{status}</span>
       })
       
       let newBadgesDiv = <div>{newBadges}</div>
@@ -38,13 +40,20 @@ export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiat
   }, [statuses]
   )
 
+  // useEffect(() => {
+
+  //   let newStatuses = char.statuses;
+
+  //   if (char.statuses !== undefined) {
+  //     setStatuses(newStatuses);
+  //   }
+
+  // }, [fight_id]
+  // )
+
   useEffect(() => {
 
-    let newStatuses = char.statuses;
-
-    if (char.statuses !== undefined) {
-      setStatuses(newStatuses);
-    }
+    setStatuses(statusList);
 
   }, [fight_id]
   )
@@ -58,6 +67,9 @@ export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiat
         damage_ouput: damageOutput, 
         damage_taken: char.damage_taken
       });
+
+      setDamageOutput(null);
+
     }
   };
 
@@ -70,8 +82,27 @@ export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiat
         damage_ouput: char.damage_output, 
         damage_taken: damageTaken
       });
+
+      setDamageTaken(null);
+
     }
   };
+
+  const submitInitiative = async () => {
+    if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
+
+      await handleInitiative({
+        fight_id: fight_id,
+        char_id: char._id,
+        initiative: initiative
+      });
+
+      setInitiative(0)
+
+    }
+      
+
+  }
 
   const handleUpdateTime = async ({char, seconds}) => {
 
@@ -108,11 +139,16 @@ export const PlayersListRow = ({char, round, fight_id, initiative, handleInitiat
 
   return (
 
-    <tr className='bg-secondary align-middle fw-bold text-black text-center'>
-      <td><span>{char.name}</span></td>
-      <td><span><Cell value={initiative} onChange={(e) => handleInitiative(e, char._id)}/></span></td>
-      <td><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span></td>
-      <td><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={submitDamageTaken}/></span></td>
+    <tr className='bg-secondary align-middle fw-bold text-black text-center border-dark'>
+      <td className="border border-right border-dark"><span>{char.name}</span></td>
+      <td className="border border-right border-dark">{round === 1 ? 
+        <span><CellSubmit value={char.initiative} onChange={setInitiative} onSubmit={submitInitiative}/></span> :
+        <span>{char.initiative ? char.initiative : "-"}</span>
+        }</td>
+      <td className="border border-right border-dark"><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span>
+      
+      </td>
+      <td className="border border-right border-dark"><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={submitDamageTaken}/></span></td>
       <td className="pe-4">{badges ? badges : ''}<CheckboxDropdown label={"Statuses"} showLabel={false} content={statuses} onChange={handleStatuses}></CheckboxDropdown>
       </td>
       <td><span><Timer onSubmit={handleUpdateTime} char={char}></Timer></span></td>

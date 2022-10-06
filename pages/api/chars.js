@@ -78,6 +78,11 @@ async function deleteChar(req, res) {
             {char_id: req.body._id}
         );
 
+        // Deleting the char initiatives
+        await db.collection('initiative').deleteMany(
+            {char_id: req.body._id}
+        );
+
         // // returning a message
         return res.json({
             data: 'Char deleted successfully',

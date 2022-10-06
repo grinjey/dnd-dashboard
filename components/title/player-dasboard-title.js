@@ -5,7 +5,7 @@ import { PlayerAddForm, PlayerRemoveForm } from "../forms";
 import { useState } from "react";
 import { charCreate, charRemove } from "../../requests/chars-api";
 
-const PlayerDashboardTitle = ({ chars, fetchChars }) => {
+const PlayerDashboardTitle = ({ chars, fetchChars, fetchInitiatives }) => {
 
     const [name, setName] = useState('');
 
@@ -31,6 +31,7 @@ const PlayerDashboardTitle = ({ chars, fetchChars }) => {
         // Send DELETE request to '/api/chars' endpoint
         await charRemove(id, name);
         await fetchChars();
+        await fetchInitiatives();
     };
 
     const handleCharRemoveSubmit = async (event) => {
