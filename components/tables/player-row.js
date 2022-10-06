@@ -4,8 +4,6 @@ import CheckboxDropdown from "../dropdown/checkbox-dropdown";
 import Timer from '../timer/timer';
 import axios from "axios";
 import { statusColors, statusList, statusTextColors } from "../../utils/statuses";
-import { InitiativeRow } from "./initiative-row";
-
 
 
 export const PlayersListRow = ({char, round, fight_id, handleDamage, fetchRounds, fetchInitiatives}) => {
@@ -119,14 +117,13 @@ export const PlayersListRow = ({char, round, fight_id, handleDamage, fetchRounds
   };
 
   const handleInitiative = async () => {
+    if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
 
-    const update = {
+      const update = {
         fight_id: fight_id,
         char_id: char._id,
         initiative: eval(initiative)
     };
-
-    console.log(update);
 
     try {
         console.log(`Updating initiative for char: ${update.char_id} for fight ${update.fight_id} to: ${update.initiative}`);
@@ -141,20 +138,10 @@ export const PlayersListRow = ({char, round, fight_id, handleDamage, fetchRounds
     }
 
     await fetchInitiatives();
+    setInitiative(0)
 
-}
-
-const submitInitiative = async () => {
-    if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
-
-      await handleInitiative({
-        fight_id: fight_id,
-        char_id: char._id,
-        initiative: initiative
-      });
-
-      setInitiative(0)
-    } 
+    }
+    
   }
   
 
@@ -163,7 +150,7 @@ const submitInitiative = async () => {
     <tr className='bg-secondary align-middle fw-bold text-black text-center border-dark'>
       <td className="border border-right border-dark"><span>{char.name}</span></td>
       <td className="border border-right border-dark">{round === 1 ? 
-            <span><CellSubmit value={char.initiative} onChange={setInitiative} onSubmit={submitInitiative}/></span> :
+            <span><CellSubmit value={char.initiative} onChange={setInitiative} onSubmit={handleInitiative}/></span> :
             <span>{char.initiative ? char.initiative : "-"}</span>}
         </td>
       <td className="border border-right border-dark"><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span>
