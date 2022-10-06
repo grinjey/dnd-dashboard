@@ -1,6 +1,7 @@
 import {useState, useEffect, useCallback} from "react";
 import PlayerList from "../tables/player-list";
 import FightOptions from "../dashboard/fight-options";
+import axios from "axios";
 
 const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRounds, fetchInitiatives}) => {
 
@@ -35,6 +36,33 @@ const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRoun
     );
 
 
+    const handleInitiative = async ({char, initiative}) => {
+        if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
+    
+          const update = {
+            fight_id: fight._id,
+            char_id: char._id,
+            initiative: eval(initiative)
+        };
+    
+        try {
+            console.log(`Updating initiative for char: ${update.char_id} for fight ${update.fight_id} to: ${update.initiative}`);
+            const response = await axios
+                .post('/api/initiative', update);
+    
+            console.log(response.data);
+        } 
+        catch (error) {
+            console.error(`There was an error updating initiative for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
+    
+        await fetchInitiatives();
+    
+        }
+        
+      }
+
     return (
         <>
         <FightOptions
@@ -46,9 +74,8 @@ const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRoun
             setFight={setFight}
             fetchFights={fetchFights}
             fetchRounds={fetchRounds}
-            fetchInitiatives={fetchInitiatives}
             />
-        <PlayerList chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fight={fight} fetchInitiatives={fetchInitiatives}/>
+        <PlayerList chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fight={fight} fetchInitiatives={fetchInitiatives} handleInitiative={handleInitiative}/>
         </>
     );
 

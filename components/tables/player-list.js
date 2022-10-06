@@ -4,7 +4,7 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { statusList} from "../../utils/statuses";
 
-const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}) => {
+const PlayerList = ({chars, round, rounds, fight, fetchRounds, handleInitiative}) => {
 
     const [charsToUse, setCharsToUse] = useState([]);
 
@@ -130,7 +130,7 @@ const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}
                                 fight_id={fight._id}
                                 handleDamage={handleDamage}
                                 fetchRounds={fetchRounds}
-                                fetchInitiatives={fetchInitiatives}
+                                handleInitiative={handleInitiative}
                                 >
 
                             </PlayersListRow>
