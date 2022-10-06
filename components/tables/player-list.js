@@ -6,7 +6,6 @@ import { statusList} from "../../utils/statuses";
 
 const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}) => {
 
-    const [playerInitiatives, setPlayerInitiatives] = useState({});
     const [charsToUse, setCharsToUse] = useState([]);
 
     useEffect(() => {
@@ -57,32 +56,6 @@ const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}
 
     }, [chars, rounds]
     );
-
-    const handleInitiative = async ({fight_id, char_id, initiative}) => {
-
-        const update = {
-            fight_id: fight_id,
-            char_id: char_id,
-            initiative: eval(initiative)
-        };
-
-        console.log(update);
-
-        try {
-            console.log(`Updating initiative for char: ${update.char_id} for fight ${update.fight_id} to: ${update.initiative}`);
-            const response = await axios
-                .post('/api/initiative', update);
-    
-            console.log(response.data);
-        } 
-        catch (error) {
-            console.error(`There was an error updating damage for char: ${update.char_id} 
-                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
-        }
-
-        await fetchInitiatives();
-
-    }
 
     // const handleInitiative = (event, id) => {
     //     const currentInitiatives = Object.assign({}, playerInitiatives);
@@ -155,9 +128,9 @@ const PlayerList = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}
                                 char={char}
                                 round={round}
                                 fight_id={fight._id}
-                                handleInitiative={handleInitiative}
                                 handleDamage={handleDamage}
                                 fetchRounds={fetchRounds}
+                                fetchInitiatives={fetchInitiatives}
                                 >
 
                             </PlayersListRow>

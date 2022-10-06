@@ -1,19 +1,17 @@
-import { Cell } from "../cell/cell";
 import { useState, useEffect } from "react";
-import Badge from 'react-bootstrap/Badge';
 import CellSubmit from '../cell/cell-with-submit';
 import CheckboxDropdown from "../dropdown/checkbox-dropdown";
 import Timer from '../timer/timer';
 import axios from "axios";
 import { statusColors, statusList, statusTextColors } from "../../utils/statuses";
+import { InitiativeRow } from "./initiative-row";
 
 
 
-export const PlayersListRow = ({char, round, fight_id, handleInitiative, handleDamage, fetchRounds}) => {
+export const PlayersListRow = ({char, round, fight_id, handleDamage, fetchRounds, fetchInitiatives}) => {
 
   const [damageOutput, setDamageOutput] = useState('');
   const [damageTaken, setDamageTaken] = useState('');
-  const [initiative, setInitiative] = useState(0);
   const [badges, setBadges] = useState(<div></div>)
   const [statuses, setStatuses] = useState({});
 
@@ -88,22 +86,6 @@ export const PlayersListRow = ({char, round, fight_id, handleInitiative, handleD
     }
   };
 
-  const submitInitiative = async () => {
-    if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
-
-      await handleInitiative({
-        fight_id: fight_id,
-        char_id: char._id,
-        initiative: initiative
-      });
-
-      setInitiative(0)
-
-    }
-      
-
-  }
-
   const handleUpdateTime = async ({char, seconds}) => {
 
     if (char._id !== undefined && char.fight_id !== undefined && char.round_id !== 0) {
@@ -141,10 +123,7 @@ export const PlayersListRow = ({char, round, fight_id, handleInitiative, handleD
 
     <tr className='bg-secondary align-middle fw-bold text-black text-center border-dark'>
       <td className="border border-right border-dark"><span>{char.name}</span></td>
-      <td className="border border-right border-dark">{round === 1 ? 
-        <span><CellSubmit value={char.initiative} onChange={setInitiative} onSubmit={submitInitiative}/></span> :
-        <span>{char.initiative ? char.initiative : "-"}</span>
-        }</td>
+      <InitiativeRow char={char} fight_id={fight_id} fetchInitiatives={fetchInitiatives} round={round}></InitiativeRow>
       <td className="border border-right border-dark"><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={submitDamageOutput}/></span>
       
       </td>
