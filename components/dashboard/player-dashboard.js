@@ -9,30 +9,31 @@ import { getRounds } from "../../requests/rounds-api";
 import { getFightsAll } from "../../requests/fights-api";
 
 
-export const PlayerDashboard = () => {
+export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights}) => {
 
-    const [chars, setChars] = useState([]);
-    const [rounds, setRounds] = useState([]);
-    const [fights, setFights] = useState([]);
+    const [chars, setChars] = useState(loadedChars);
+    const [rounds, setRounds] = useState(loadedRounds);
+    const [fights, setFights] = useState(loadedFights);
 
-    useEffect(() => {
-        fetchChars();
-        fetchFights();
-        fetchRounds();
-    },[]
-    )
+    // useEffect(() => {
+    //     fetchChars();
+    //     fetchFights();
+    //     fetchRounds();
+    // },[]
+    // )
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        const fetchRoundsSingle = async () => {
-            const roundsInfo = await getRounds();
-            setRounds(roundsInfo.data);
-        }
+    //     const fetchRoundsSingle = async () => {
+    //         console.log("Fetching rounds single")
+    //         const roundsInfo = await getRounds();
+    //         setRounds(roundsInfo.data);
+    //     }
 
-        fetchRoundsSingle();
+    //     fetchRoundsSingle();
 
-    }, [chars]
-    )
+    // }, [chars]
+    // )
 
     const fetchChars = async () => {
         console.log("fetching chars")

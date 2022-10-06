@@ -144,8 +144,8 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
             <Card.Title className="border-bottom border-dark py-1">
                 <div className="d-flex flex-row justify-content-around">
                         <div className="text-black">
-                            <span> Current Fight: </span>
-                            <span style={{paddingLeft: "5px", color: "#FFD700"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
+                            <span className=""> Current Fight: </span>
+                            <span style={{paddingLeft: "5px", color: "#7fffd4"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
                         </div>
                         <div className="text-black">
                             <span> Current Round: </span>
@@ -153,7 +153,7 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
                         </div>  
                 </div>
             </Card.Title>
-            <Stack direction="horizontal" className="d-flex justify-content-center" gap={5}>
+            <Stack direction="horizontal" className="d-flex justify-content-around" gap={5}>
 
                     <Stack direction="horizontal" gap={2}>
                         <FightSelectDropdown fights={fights} selectFight={selectFight}></FightSelectDropdown>

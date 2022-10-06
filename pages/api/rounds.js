@@ -92,8 +92,6 @@ async function updateRound(req, res) {
         // connect to the database
         let { db } = await connectToDatabase();
 
-        console.log(req.body)
-
         if (req.body.fight_id !== undefined && req.body.round_id !== 0) {
             await db.collection('rounds').updateOne(
                 {fight_id: req.body.fight_id, round_id: req.body.round_id, char_id: req.body.char_id},

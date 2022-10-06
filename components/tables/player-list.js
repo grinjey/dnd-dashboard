@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { PlayersListRow } from "./player-row";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import { statusList} from "../../utils/statuses";
 
 const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
@@ -11,8 +12,12 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
     useEffect(() => {
 
         const mergeCharRounds = () => {
+
+            console.log("FIGHT: ")
+            console.log(fight)
+
             const map = new Map();
-            const props = ["damage_output", "damage_taken", "round_time", "round_id", "fight_id"]
+            const props = ["damage_output", "damage_taken", "round_time", "round_id", "fight_id", "statuses"]
             chars.forEach(char => map.set(char._id, char));
             rounds.forEach(round => map.set(
                 round.char_id, 
@@ -21,20 +26,33 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
                 }
             ));
             const merged = Array.from(map.values());
-            const filtered = merged.filter(function(item) {return item._id !== undefined;})
-            return filtered;
+            
+            merged.forEach(char => {
+                if (!char.statuses) {
+                    char.statuses = statusList;
+                }
+
+            })
+
+            return merged;
         }
 
-        if (rounds.length > 0) {
+        // if (rounds.length > 0) {
+        //     const mergedChars = mergeCharRounds();
+        //     setCharsToUse(mergedChars);
+        //     console.log("Updating charsToUse merge");
+        //     console.log(mergedChars);
+        // } 
+        // else {
+        //     console.log("Updating charsToUse");
+        //     setCharsToUse(chars); 
+        // }
+
             const mergedChars = mergeCharRounds();
             setCharsToUse(mergedChars);
             console.log("Updating charsToUse merge");
             console.log(mergedChars);
-        } 
-        else {
-            console.log("Updating charsToUse");
-            setCharsToUse(chars); 
-        }
+        
 
     }, [chars, rounds]
     );
@@ -88,14 +106,15 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 
     return (
 
-        <Table hover className="align-items-center">
+        <Table hover className="">
             <thead>
-                <tr>
-                    <th className="border-bottom text-secondary">Name</th>
-                    <th className="border-bottom text-secondary" role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
-                    <th className="border-bottom text-secondary">Damage Output</th>
-                    <th className="border-bottom text-secondary">Damage Taken</th>
-                    <th className="border-bottom text-secondary">Round Time</th>
+                <tr className="text-center border-bottom text-secondary" >
+                    <th style={ { minWidth: "150px" } }>Name</th>
+                    <th style={ { minWidth: "150px" } } role='button' onClick={sortCharsByInitiative}>Initiative <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16"><path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/></svg></th>
+                    <th style={ { minWidth: "150px" } }>Damage Output</th>
+                    <th style={ { minWidth: "150px" } }>Damage Taken</th>
+                    <th style={ { minWidth: "150px" } }>Status</th>
+                    <th style={ { minWidth: "150px" } }>Round Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,6 +145,19 @@ const PlayerList = ({chars, round, rounds, fetchRounds, fight}) => {
 }
 
 export default PlayerList;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // const handleDamageOutput = async (char) => {
