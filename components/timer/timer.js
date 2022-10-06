@@ -19,14 +19,14 @@ const Timer = ({onSubmit, char}) => {
     
     function submitTime() {
         if (seconds !== 0) {
-            onSubmit({char, seconds})
+            onSubmit({seconds})
         }
         
     }
 
     function clearTime() {
         setSeconds(0)
-        onSubmit({char, seconds: 0})
+        onSubmit({seconds: 0})
     }
 
     useEffect(() => {
