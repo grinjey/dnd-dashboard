@@ -41,6 +41,37 @@ const PlayerListNew = ({chars, round, rounds, fetchRounds, fetchInitiatives}) =>
     }, [chars, rounds]
     );
 
+    const handleDamage = async ({fight_id, round_id, char_id, damage_output, damage_taken}) => {
+
+        let out = damage_output ? damage_output : 0;
+        let taken = damage_taken ? damage_taken : 0;
+
+        const update = {
+            fight_id: fight_id,
+            round_id: round_id,
+            char_id: char_id,
+            damage_output: eval(out),
+            damage_taken: eval(taken)
+        }
+
+        console.log(update);
+
+        try {
+            console.log(`Updating damage for char: ${update.char_id} for fight ${update.fight_id} round ${update.round_id} to: ${update.damage_output} ${update.damage_taken}`);
+            const response = await axios
+                .post('/api/rounds', update);
+    
+            console.log(response.data);
+        } 
+        catch (error) {
+            console.error(`There was an error updating damage for char: ${update.char_id} 
+                        for fight ${update.fight_id} round ${update.round_id}: ${error}`)
+        }
+
+        await fetchRounds();
+
+    }
+
     const sortCharsByName = () => {
         const currentChars = charsToUse.slice();
         currentChars.sort((a, b) => b.name.localeCompare(a.name));
@@ -73,7 +104,7 @@ const PlayerListNew = ({chars, round, rounds, fetchRounds, fetchInitiatives}) =>
                         <tr key={i} className='bg-secondary align-middle fw-bold text-black text-center border-dark'>
                             <td className="border border-right border-dark"><span>{char.name}</span></td>
                             <PlayerInitiativeRow char={char} round={round} fetchInitiatives={fetchInitiatives}></PlayerInitiativeRow>
-                            <PlayerDamageRows char={char} fetchRounds={fetchRounds}></PlayerDamageRows>
+                            <PlayerDamageRows char={char} handleDamage={handleDamage}></PlayerDamageRows>
                             <PlayerStatusRow char={char}></PlayerStatusRow>
                             <PlayerTimeRow char={char} fetchRounds={fetchRounds}></PlayerTimeRow>
                         </tr>
