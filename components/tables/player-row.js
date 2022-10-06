@@ -26,7 +26,7 @@ export const PlayersListRow = ({char, round, fight_id, handleInitiative, handleD
   
       let newBadges = activeStatuses.map(status => {
         // return <Badge key={status} style={{backgroundColor: statusColors[status]}} >{status}</Badge>
-        return <span className="badge" style={{backgroundColor: statusColors[status], color: statusTextColors[status]}}>{status}</span>
+        return <span key={status} className="badge" style={{backgroundColor: statusColors[status], color: statusTextColors[status]}}>{status}</span>
       })
       
       let newBadgesDiv = <div>{newBadges}</div>
