@@ -3,16 +3,16 @@ import { useState } from "react";
 import axios from "axios";
 
 
-const PlayerInitiativeRow = ({char, round, fetchInitiatives}) => {
+const PlayerInitiativeRow = ({char, round, fight_id, fetchInitiatives}) => {
 
     const [initiative, setInitiative] = useState(0);
 
 
     const handleInitiative = async () => {
         if (initiative !== null && initiative !== undefined && initiative !== 0 && initiative !== '') {
-    
+            
           const update = {
-            fight_id: char.fight_id,
+            fight_id: fight_id,
             char_id: char._id,
             initiative: eval(initiative)
         };

@@ -6,7 +6,7 @@ import PlayerDamageRows from "./rows/damage-rows";
 import PlayerStatusRow from "./rows/status-row";
 import PlayerTimeRow from "./rows/time-row";
 
-const PlayerListNew = ({chars, round, rounds, fetchRounds, fetchInitiatives}) => {
+const PlayerListNew = ({chars, round, rounds, fight, fetchRounds, fetchInitiatives}) => {
 
     const [charsToUse, setCharsToUse] = useState([]);
 
@@ -103,10 +103,10 @@ const PlayerListNew = ({chars, round, rounds, fetchRounds, fetchInitiatives}) =>
                     charsToUse.map((char, i) => (
                         <tr key={i} className='bg-secondary align-middle fw-bold text-black text-center border-dark'>
                             <td className="border border-right border-dark"><span>{char.name}</span></td>
-                            <PlayerInitiativeRow char={char} round={round} fetchInitiatives={fetchInitiatives}></PlayerInitiativeRow>
-                            <PlayerDamageRows char={char} handleDamage={handleDamage}></PlayerDamageRows>
+                            <PlayerInitiativeRow char={char} round={round} fight_id={fight._id} fetchInitiatives={fetchInitiatives}></PlayerInitiativeRow>
+                            <PlayerDamageRows char={char} fight_id={fight._id} round={round} fetchRounds={fetchRounds}></PlayerDamageRows>
                             <PlayerStatusRow char={char}></PlayerStatusRow>
-                            <PlayerTimeRow char={char} fetchRounds={fetchRounds}></PlayerTimeRow>
+                            <PlayerTimeRow char={char} round={round} fight_id={fight._id} fetchRounds={fetchRounds}></PlayerTimeRow>
                         </tr>
                             
                         )

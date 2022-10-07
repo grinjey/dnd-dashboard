@@ -47,7 +47,7 @@ const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRoun
             fetchRounds={fetchRounds}
             fetchInitiatives={fetchInitiatives}
             />
-        <PlayerListNew chars={chars} round={round} rounds={roundsToUse} fetchRounds={fetchRounds} fetchInitiatives={fetchInitiatives}/>
+        <PlayerListNew chars={chars} round={round} rounds={roundsToUse} fight={fight} fetchRounds={fetchRounds} fetchInitiatives={fetchInitiatives}/>
         </>
     );
 

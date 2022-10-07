@@ -1,14 +1,14 @@
 import axios from "axios";
 import Timer from "../../timer/timer";
 
-const PlayerTimeRow = ({char, fetchRounds}) => {
+const PlayerTimeRow = ({char, round, fight_id, fetchRounds}) => {
 
     const handleUpdateTime = async ({seconds}) => {
 
-        if (char._id !== undefined && char.fight_id !== undefined && char.round_id !== 0) {
+        if (char._id !== undefined && fight_id !== undefined && round !== 0) {
             const update = {
-                fight_id: char.fight_id,
-                round_id: char.round_id,
+                fight_id: fight_id,
+                round_id: round,
                 char_id: char._id,
                 round_time: Number(seconds),
             }

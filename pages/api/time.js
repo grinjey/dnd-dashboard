@@ -35,7 +35,8 @@ const updateRoundTime = async (req, res) => {
                     fight_id: req.body.fight_id,
                     round_id: req.body.round_id
                 },
-                { $set: {round_time: req.body.round_time} }
+                { $set: {round_time: req.body.round_time} },
+                {upsert:true}
             );
     
             return res.json({
