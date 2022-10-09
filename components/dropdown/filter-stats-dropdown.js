@@ -1,4 +1,3 @@
-import { ButtonGroup } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
@@ -6,8 +5,8 @@ const FilterStatsDropdown = ({fights, onSelect, title}) => {
 
     return (
 
-        <Dropdown as={ButtonGroup} onSelect={(e) => {onSelect(e)}}>
-            <Dropdown.Toggle className="btn-dark" id="filter-stats">{title}</Dropdown.Toggle>
+        <Dropdown onSelect={(e) => {onSelect(e)}}>
+            <Dropdown.Toggle role="button" as={"text"} id="filter-stats">{title}</Dropdown.Toggle>
             <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
                 <Dropdown.Item className='text-white' eventKey={0}>All</Dropdown.Item>
                 <Dropdown.Divider className='border-white'/>

@@ -37,7 +37,7 @@ const PlayerInitiativeRow = ({char, round, fight_id, fetchInitiatives}) => {
 
     return (
 
-        <td className="border border-right border-dark">{round === 1 ? 
+        <td className="">{round === 1 ? 
             <span><CellSubmit value={char.initiative} onChange={setInitiative} onSubmit={() => handleInitiative()}/></span> :
             <span>{char.initiative ? char.initiative : "-"}</span>}
         </td>

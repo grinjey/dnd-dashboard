@@ -1,5 +1,5 @@
-import {useState, useEffect, useCallback} from "react";
-import { Card, Stack, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Container, Navbar, Dropdown } from "react-bootstrap";
 import { FightAddForm } from "../forms";
 import FormModalContainer from "../modal/modal";
 import ConfirmDeleteModal from "../modal/confirm-delete-modal";
@@ -140,39 +140,73 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
 
 
     return (
-        <Card className="py-2 px-2 bg-secondary d-flex flex-wrap" border="dark">
-            <Card.Title className="text-center text-black fw-bold border-bottom border-dark pb-1">Fight Options</Card.Title>
-            <Card.Title className="border-bottom border-dark py-1">
-                <div className="d-flex flex-row justify-content-around">
-                        <div className="text-black">
-                            <span className=""> Current Fight: </span>
-                            <span className="fw-bold" style={{paddingLeft: "5px", color: "#8b008b"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
-                        </div>
-                        <div className="text-black">
-                            <span> Current Round: </span>
-                            <span className="fw-bold" style={{paddingLeft: "5px", paddingRight : "2px", color: "#8B008B"}}> {round ? round : "N/A"} </span>
-                        </div>  
-                </div>
-            </Card.Title>
-            <Stack direction="horizontal" className="d-flex justify-content-around" gap={5}>
 
-                    <Stack direction="horizontal" gap={2}>
+        <>
+        <Container className="bg-dark border-bottom border-secondary text-white-50" fluid>
+
+            <Navbar variant="dark" expand="lg">
+                <Container fluid>
+                <Navbar.Brand><h4 className="text-center fw-bold py-1 border-bottom border-secondary">Fight Options</h4></Navbar.Brand>
+                <Navbar.Toggle className="bg-dark" aria-controls="fight-options" />
+                
+
+                <Navbar.Collapse className="justify-content-around" id="fight-options">
+                    
+                    <div role="button" className="fw-bold pb-1">
                         <FightSelectDropdown fights={fights} selectFight={selectFight}></FightSelectDropdown>
-                        <FormModalContainer triggerText={'Create New Fight'} form={ <FightAddForm handleSubmit={handleFightAdd} setFight={setFightToCreate} formId="fightAdd"/>} formId="fightAdd"/>
-                        <ConfirmDeleteModal triggerText={"Delete Fight"} onSubmit={handleFightDelete} itemToDelete={`Fight: ${fight.fight_name}`}></ConfirmDeleteModal>
-                    </Stack>
+                    </div>
                     
+                    <Dropdown className="pb-1"> 
+                    <Dropdown.Toggle className='fw-bold' as={"text"} role="button" style={{fontSize: "15px"}}>Fight Add/Remove</Dropdown.Toggle>
+                        <Dropdown.Menu className='dropdown-menu-dark bg-dark'>
+                            <Dropdown.Item> <FormModalContainer 
+                                triggerText={'Create New Fight'} 
+                                form={ <FightAddForm handleSubmit={handleFightAdd} setFight={setFightToCreate} formId="fightAdd"/>} 
+                                formId="fightAdd" 
+                                border="success"/> 
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <ConfirmDeleteModal triggerText={"Delete Fight"} onSubmit={handleFightDelete} itemToDelete={`Fight: ${fight.fight_name}`}></ConfirmDeleteModal>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     
-                    <Stack direction="horizontal" gap={2}>
-                        <div className="ms-auto">
-                            <RoundSelectDropdown fight={fight} setRound={setRound}/>
-                        </div>
-                        <Button variant="dark" size="sm" onClick={createNewRound}>Create Round</Button>
-                        <ConfirmDeleteModal triggerText={"Delete Last Round"} onSubmit={handleRoundDelete} itemToDelete={`Round ${round}`}></ConfirmDeleteModal>
-                    </Stack>
+                    <div role="button" className="fw-bold pb-1">
+                        <RoundSelectDropdown fight={fight} setRound={setRound}/>
+                    </div>
 
-            </Stack>
-        </Card>
+                    <Dropdown className="pb-1">
+                        <Dropdown.Toggle role="button" className='fw-bold' as={"text"} style={{fontSize: "15px"}}>Round Add/Remove</Dropdown.Toggle>
+                        <Dropdown.Menu className='dropdown-menu-dark bg-dark'>
+                            <Dropdown.Item>
+                                <div variant="dark" size="sm" onClick={createNewRound}>Create Round</div>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <ConfirmDeleteModal triggerText={"Delete Last Round"} onSubmit={handleRoundDelete} itemToDelete={`Round ${round}`}></ConfirmDeleteModal>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+
+                </Navbar.Collapse>
+
+                </Container>
+            </Navbar>
+
+        
+        </Container>
+
+        <Container className="bg-dark text-white text-center d-flex justify-content-around pt-1" fluid>
+                <div className="pb-1 pe-2">
+                    <span><h6 className="fw-bold"> Current Fight </h6></span>
+                    <span className="fw-bold" style={{color: "#00ced1"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>
+                </div>
+                <div className="pb-1">
+                    <span><h6 className="fw-bold"> Current Round </h6></span>
+                    <span className="fw-bold" style={{paddingRight : "2px", color: "#00ced1"}}> {round ? round : "N/A"} </span>
+                </div>
+        </Container>
+
+        </>
     );
 
 };

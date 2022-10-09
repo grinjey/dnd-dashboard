@@ -46,7 +46,7 @@ async function addFight(req, res) {
     try {
         // connect to the database
         let { db } = await connectToDatabase();
-        await db.collection('fights').update(req.body, {$setOnInsert: {fight_name: req.body.fight_name}}, {upsert: true});
+        await db.collection('fights').updateOne(req.body, {$setOnInsert: {fight_name: req.body.fight_name}}, {upsert: true});
         // return a message
         return res.json({
             data: `Char ${req.body} added successfully`,

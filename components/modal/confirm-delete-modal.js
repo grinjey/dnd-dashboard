@@ -21,7 +21,7 @@ export function ConfirmDeleteModal({triggerText, onSubmit, itemToDelete}) {
 
         return (
             <>
-            <Button variant="dark" size="sm" onClick={showModal}> {triggerText} </Button>
+            <div role="button" onClick={showModal}> {triggerText} </div>
             <Modal className="border border-danger" show={show} onHide={closeModal}>
                 <Modal.Header className="bg-dark border border-danger" closeButton>
                 <Modal.Title className="bg-dark text-white-50">{triggerText}</Modal.Title>

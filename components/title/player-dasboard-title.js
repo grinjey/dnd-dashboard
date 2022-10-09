@@ -1,4 +1,3 @@
-import Stack from "react-bootstrap/Stack";
 import PlayerNavDropdown from "../dropdown/player-nav-dropdown";
 import { FormModalContainer } from "../modal/modal";
 import { PlayerAddForm, PlayerRemoveForm } from "../forms";
@@ -46,24 +45,24 @@ const PlayerDashboardTitle = ({ chars, fetchChars, fetchInitiatives }) => {
     };
 
     return (
-        <Stack direction="horizontal">
             <PlayerNavDropdown 
                 addModal={<FormModalContainer 
-                    triggerText={'Add New Player'} 
+                    triggerText={'Add Player'} 
                     form={ <PlayerAddForm 
                         handleSubmit={handleCharSubmit} 
                         setName={setName} 
                         formId="playerAdd"/>} 
-                    formId="playerAdd"/>}
+                    formId="playerAdd"
+                    border="success"/>}
                 removeModal={<FormModalContainer 
                     triggerText={'Remove Player'} 
                     form={ <PlayerRemoveForm 
                         handleSubmit={handleCharRemoveSubmit} 
                         setName={setName} 
                         formId="playerRemove"/>} 
-                    formId="playerRemove"/>}
+                    formId="playerRemove"
+                    border="danger"/>}
             />
-            </Stack>
     );
 
 };

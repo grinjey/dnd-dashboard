@@ -5,8 +5,8 @@ const FightSelectDropdown = ({fights, selectFight}) => {
 
     return (
 
-        <Dropdown as={ButtonGroup} onSelect={(e) => {selectFight(e)}}>
-            <Dropdown.Toggle className="btn-dark btn-sm" id="filter-stats">Select Fight</Dropdown.Toggle>
+        <Dropdown onSelect={(e) => {selectFight(e)}}>
+            <Dropdown.Toggle as={"text"} id="filter-stats">Select Fight</Dropdown.Toggle>
             <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
                 {fights.length > 0 ? (
                         fights.map((fight) => (

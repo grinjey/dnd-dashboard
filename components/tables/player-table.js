@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import PlayerListNew from "./player-list-new";
 import FightOptions from "../dashboard/fight-options";
+import { Container } from "react-bootstrap";
 
 const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRounds, fetchInitiatives}) => {
 
@@ -35,7 +36,7 @@ const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRoun
     );
 
     return (
-        <>
+        <Container fluid>
         <FightOptions
             chars={chars} 
             fight={fight}
@@ -47,8 +48,11 @@ const PlayerTable = ({chars, rounds, fights, initiatives, fetchFights, fetchRoun
             fetchRounds={fetchRounds}
             fetchInitiatives={fetchInitiatives}
             />
-        <PlayerListNew chars={chars} round={round} rounds={roundsToUse} fight={fight} fetchRounds={fetchRounds} fetchInitiatives={fetchInitiatives}/>
-        </>
+        <div className="mt-3">
+            <PlayerListNew chars={chars} round={round} rounds={roundsToUse} fight={fight} fetchRounds={fetchRounds} fetchInitiatives={fetchInitiatives}/>
+        </div>
+        
+        </Container>
     );
 
 }

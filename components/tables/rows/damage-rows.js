@@ -65,8 +65,8 @@ const PlayerDamageRows = ({char, fetchRounds, fight_id, round}) => {
   return (
 
       <>
-      <td className="border border-right border-dark"><span><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={() => handleDamage({type: "out"})}/></span></td>
-      <td className="border border-right border-dark"><span><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => handleDamage({type: "taken"})}/></span></td>
+      <td className=""><CellSubmit value={char.damage_output} onChange={setDamageOutput} onSubmit={() => handleDamage({type: "out"})}/></td>
+      <td className=""><CellSubmit value={char.damage_taken} onChange={setDamageTaken} onSubmit={() => handleDamage({type: "taken"})}/></td>
       </>
       
   )

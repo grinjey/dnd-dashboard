@@ -20,7 +20,7 @@ export const CellSubmit = ({value, onChange, onSubmit}) => {
 
     return (
         editing ?
-            <span className="d-flex align-center">
+            <span>
                 <input className="bg-secondary text-black fw-bold" type="number" onChange={(e) => onChange(e.target.value)} onBlur={() => onBlur()} />
             </span>
              : 

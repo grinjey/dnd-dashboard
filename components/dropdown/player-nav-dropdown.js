@@ -1,27 +1,44 @@
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Container } from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function PlayerNavDropdown({addModal, removeModal}) {
 
     return (
-        <Navbar variant="dark" expand="lg" >
-            <Navbar.Brand className='text-white' href="#home" style={{fontSize : "45px"}}>Players</Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbar-dark-example" />
-            <Navbar.Collapse id="navbar-dark-example">
-            <Nav>
-                <NavDropdown style={{fontSize : "15px"}}
-                bg="dark"
-                id="nav-dropdown-dark-example"
-                title="Add/Remove"
-                menuVariant="dark"
-                >
-                <div className='d-flex justify-content-center pb-2'>{addModal}</div>
-                <div className='d-flex justify-content-center'>{removeModal}</div>
+
+        <Navbar className='text-white mb-3' variant="dark" expand="lg" collapseOnSelect>
+            <Container fluid>
+            <Navbar.Brand className='border-bottom border-white fw-bold' href="#home" style={{fontSize: "30px"}}>Players</Navbar.Brand>
+            <Navbar.Toggle className='' aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                
+                <Dropdown>
+
+                <Dropdown.Toggle className='text-white-50 fw-bold' as={"text"} style={{fontSize: "20px"}}>Options</Dropdown.Toggle>
+                <Dropdown.Menu className='dropdown-menu-dark bg-dark'> 
+
+                    <Dropdown.Item> {addModal} </Dropdown.Item>
+                    <Dropdown.Item> {removeModal} </Dropdown.Item>
+
+                </Dropdown.Menu>
+
+                </Dropdown>
+                
+
+                {/* <Nav style={{fontSize: "15px"}} >
+                <NavDropdown title="Options" id="basic-nav-dropdown">
+
+                    <NavDropdown.Item className='' href=""> {addModal} </NavDropdown.Item>
+                    <NavDropdown.Item className='' href=""> {removeModal} </NavDropdown.Item>
+
                 </NavDropdown>
-            </Nav>
+                </Nav> */}
+                
             </Navbar.Collapse>
+            </Container>
+            
         </Navbar>
+
     );
     
 }

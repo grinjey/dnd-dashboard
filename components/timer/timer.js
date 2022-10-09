@@ -1,4 +1,3 @@
-import ButtonGroup from "react-bootstrap/ButtonGroup"
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import SplitButton from 'react-bootstrap/SplitButton';
@@ -47,13 +46,13 @@ const Timer = ({onSubmit, char}) => {
     )
   
     return (
-        <div className="d-flex flex-row align-items-center">
-            <div className="pe-4"> {seconds === char.round_time ? char.round_time : seconds} </div>
-            <div className="d-flex flex-column ms-auto">
+        <div className="d-flex flex-row align-items-center justify-content-around">
+            <div className="pe-3"> {seconds === char.round_time ? char.round_time : seconds} </div>
+            <div className="d-flex flex-column">
                 <Button size="sm" className="mb-1" variant="success" onClick={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
                 <Button size="sm" className="mb-1" variant="warning" onClick={reset}>Reset</Button>
                 <SplitButton
-                    variant="dark"
+                    variant="secondary"
                     title="Submit"
                     onClick={submitTime}
                     size={"sm"}

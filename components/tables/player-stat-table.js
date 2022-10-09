@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import Table from "react-bootstrap/Table";
 import Card from "react-bootstrap/Card";
 import FilterStatsDropdown from "../dropdown/filter-stats-dropdown";
+import { Container } from "react-bootstrap";
 
 export const PlayerStatTable = ({chars, rounds, fights}) => {
 
@@ -122,34 +123,33 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
     };
 
     return (
-        <Card border="" style={{backgroundColor : "#062206"}} className="d-flex table-wrapper table-responsive shadow-sm">
-            <div className="text-center fw-bold px-3 py-2 border-bottom">
-                <h5 className="text-white">Player Statistics</h5>
+
+        <Container fluid>
+            <div className="border-gray">
+                <h5 className="text-white text-center pb-1">Player Statistics</h5>
+                <div className="text-white text-center mb-2">
+                    <FilterStatsDropdown fights={fights} onSelect={selectFilter} title={filter}></FilterStatsDropdown>
+                </div>
             </div>
-            <div className="d-flex flex-row border-bottom px-2 py-2 justify-content-center align-center">
-                <FilterStatsDropdown fights={fights} onSelect={selectFilter} title={filter}></FilterStatsDropdown>
-            </div>
-            <Card.Body>
-            
-            <Table hover className="align-items-center text-center">
+            <Table hover variant="dark" className="align-items-center text-center" responsive>
                 <thead>
-                    <tr>
-                        <th className="border-bottom text-secondary">Name</th>
-                        <th className="border-bottom text-secondary">Damage Out/Round</th>
-                        <th className="border-bottom text-secondary">Damage Taken/Round</th>
-                        <th className="border-bottom text-secondary">Time/Round</th>
-                        <th className="border-bottom text-secondary">Total Time</th>
+                    <tr className="text-white-50 border border-secondary">
+                        <th>Name</th>
+                        <th>Damage Out/Round</th>
+                        <th>Damage Taken/Round</th>
+                        <th>Time/Round</th>
+                        <th>Total Time</th>
                     </tr>
                 </thead>
                 <tbody>
                     {charDprs.length > 0 ? (
                         charDprs.map((dpr) => (
-                            <tr key={dpr.name} className='bg-secondary fw-bold text-black text-center border-dark'>
-                                <td className="border border-right border-dark"><span>{dpr.name}: </span></td>
-                                <td><span>{dpr.dopr ? dpr.dopr : 0}</span></td>
-                                <td><span>{dpr.dtpr ? dpr.dtpr : 0}</span></td>
-                                <td><span>{dpr.tpr ? dpr.tpr : 0}s</span></td>
-                                <td><span>{dpr.stt ? dpr.stt : 0}s</span></td>
+                            <tr key={dpr.name} className='fw-bold text-center border-secondary'>
+                                <td className="border-end border-start border-secondary">{dpr.name}:</td>
+                                <td>{dpr.dopr ? dpr.dopr : 0}</td>
+                                <td>{dpr.dtpr ? dpr.dtpr : 0}</td>
+                                <td>{dpr.tpr ? dpr.tpr : 0}s</td>
+                                <td className="border-end border-secondary">{dpr.stt ? dpr.stt : 0}s</td>
                                 
                             </tr>
                             )
@@ -162,8 +162,49 @@ export const PlayerStatTable = ({chars, rounds, fights}) => {
                     }
                 </tbody>
             </Table>
-            </Card.Body>
-        </Card>
+        </Container>
+
+        // <Card style={{backgroundColor : "#062206"}} className="d-flex table-wrapper table-responsive shadow-sm">
+        //     <Card.Title>
+                // <h5 className="text-white text-center">Player Statistics</h5>
+                // <div className="text-white text-center">
+                //     <FilterStatsDropdown fights={fights} onSelect={selectFilter} title={filter}></FilterStatsDropdown>
+                // </div>
+        //     </Card.Title>
+        //     <Card.Body>
+            // <Table hover className="align-items-center text-center">
+            //     <thead>
+            //         <tr>
+            //             <th className="border-dark text-secondary">Name</th>
+            //             <th className="border-dark text-secondary">Damage Out/Round</th>
+            //             <th className="border-dark text-secondary">Damage Taken/Round</th>
+            //             <th className="border-dark text-secondary">Time/Round</th>
+            //             <th className="border-dark text-secondary">Total Time</th>
+            //         </tr>
+            //     </thead>
+            //     <tbody>
+            //         {charDprs.length > 0 ? (
+            //             charDprs.map((dpr) => (
+            //                 <tr key={dpr.name} className='bg-secondary fw-bold text-black text-center border-dark'>
+            //                     <td className="border border-right border-dark"><span>{dpr.name}: </span></td>
+            //                     <td><span>{dpr.dopr ? dpr.dopr : 0}</span></td>
+            //                     <td><span>{dpr.dtpr ? dpr.dtpr : 0}</span></td>
+            //                     <td><span>{dpr.tpr ? dpr.tpr : 0}s</span></td>
+            //                     <td><span>{dpr.stt ? dpr.stt : 0}s</span></td>
+                                
+            //                 </tr>
+            //                 )
+            //                 )
+            //             ) : (
+            //                 <tr className="table-row">
+            //                     <td className="table-item" style={{ textAlign: 'center' }} colSpan={6}>There are no Characters for statistics.</td>
+            //                 </tr>
+            //             )
+            //         }
+            //     </tbody>
+            // </Table>
+        //     </Card.Body>
+        // </Card>
         
     )
 }

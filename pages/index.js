@@ -3,6 +3,8 @@ import { fetchAllChars } from "../utils/db-requests/char-requests";
 import { fetchAllFights } from "../utils/db-requests/fight-requests";
 import { fetchAllRounds } from "../utils/db-requests/round-requests";
 import { fetchAllInits } from "../utils/db-requests/init-requests.js";
+import Head from "next/head.js";
+import { Container } from "react-bootstrap";
 
 
 
@@ -44,22 +46,22 @@ export async function getServerSideProps(context) {
 export default function App({loadedChars, loadedRounds, loadedFights, loadedInitiatives}) {
 
     return (
-        <div style={{backgroundColor : 'black', height : "150vh"}}>
-        <div className="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-            <div className="mb-4 mb-lg-0 ps-5">
-                <h4 className="text-white">Character List</h4>
-                <p className="mb-0 text-white-50">Your DnD characters.</p>
-            </div>
-        </div>
+        <>
+        <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        </Head>
 
-        <div className="d-flex justify-content-center">
-            <PlayerDashboard loadedChars={loadedChars} loadedRounds={loadedRounds} loadedFights={loadedFights} loadedInitiatives={loadedInitiatives}/>
+        <Container className="bg-secondary min-vh-100" fluid>
+
+        <div className="text-black text-center pr-3 pt-1">
+            <h4>Character List</h4>
         </div>
         
-        
-        
-        
-        </div>
+        <PlayerDashboard loadedChars={loadedChars} loadedRounds={loadedRounds} loadedFights={loadedFights} loadedInitiatives={loadedInitiatives}/>
+
+        </Container>
+        </>
+
     );
 
 };

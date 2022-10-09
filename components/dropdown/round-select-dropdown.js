@@ -19,13 +19,13 @@ const RoundSelectDropdown = ({fight, setRound}) => {
 
     return (
 
-        <Dropdown as={ButtonGroup} onSelect={(e) => {handleSelect(e)}}>
-            <Dropdown.Toggle className="btn-dark btn-sm" id="select-round">Select Round</Dropdown.Toggle>
+        <Dropdown onSelect={(e) => {handleSelect(e)}}>
+            <Dropdown.Toggle as={"text"} id="select-round">Select Round</Dropdown.Toggle>
             <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
 
                 { roundsToFill.length > 0 ? 
                     (roundsToFill.map((r) => <Dropdown.Item key={r} eventKey={r}> {r} </Dropdown.Item>)) : 
-                    (<div className='d-flex justify-content-center'>No Rounds...</div>)
+                    (<Dropdown.Item className='text-center'>No Rounds...</Dropdown.Item>)
                 }
 
             </Dropdown.Menu>
