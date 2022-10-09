@@ -71,7 +71,7 @@ const PlayerListNew = ({chars, round, rounds, fight, fetchRounds, fetchInitiativ
             <tbody>
                 {charsToUse.length > 0 ? (
                     charsToUse.map((char, i) => (
-                        <tr key={i} className='align-middle fw-bold text-center border-bottom border-secondary' style={{whiteSpace: "nowrap"}}>
+                        <tr key={i} className='align-middle fw-bold text-center border-bottom border-secondary'>
                             <td className="border-end border-start border-secondary"><span>{char.name}</span></td>
                             <PlayerInitiativeRow char={char} round={round} fight_id={fight._id} fetchInitiatives={fetchInitiatives}></PlayerInitiativeRow>
                             <PlayerDamageRows char={char} fight_id={fight._id} round={round} fetchRounds={fetchRounds}></PlayerDamageRows>

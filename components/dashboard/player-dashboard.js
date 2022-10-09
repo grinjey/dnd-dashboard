@@ -45,7 +45,7 @@ export const PlayerDashboard = ({loadedChars, loadedRounds, loadedFights, loaded
 
     return (
 
-        <Container className="mw-50" style={{backgroundColor : "#062206"}} fluid>
+        <Container className="col-lg-8 col-md-10 col-xs-12" style={{backgroundColor : "#062206"}} fluid>
             <PlayerDashboardTitle chars={chars} fetchChars={fetchChars} fetchInitiatives={fetchInitiatives}/>
             <PlayerTable chars={chars} rounds={rounds} fights={fights} initiatives={initiatives} fetchRounds={fetchRounds} fetchFights={fetchFights} fetchInitiatives={fetchInitiatives}/>
             <PlayerStatTable chars={chars} rounds={rounds} fights={fights}></PlayerStatTable>

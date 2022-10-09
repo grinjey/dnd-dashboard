@@ -21,7 +21,7 @@ const RoundSelectDropdown = ({fight, setRound}) => {
 
         <Dropdown onSelect={(e) => {handleSelect(e)}}>
             <Dropdown.Toggle as={"text"} id="select-round">Select Round</Dropdown.Toggle>
-            <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
+            <Dropdown.Menu className="bg-dark border-secondary dropdown-menu-dark">
 
                 { roundsToFill.length > 0 ? 
                     (roundsToFill.map((r) => <Dropdown.Item key={r} eventKey={r}> {r} </Dropdown.Item>)) : 

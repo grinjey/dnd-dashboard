@@ -7,9 +7,9 @@ const FilterStatsDropdown = ({fights, onSelect, title}) => {
 
         <Dropdown onSelect={(e) => {onSelect(e)}}>
             <Dropdown.Toggle role="button" as={"text"} id="filter-stats">{title}</Dropdown.Toggle>
-            <Dropdown.Menu className="bg-dark border-black dropdown-menu-dark">
-                <Dropdown.Item className='text-white' eventKey={0}>All</Dropdown.Item>
-                <Dropdown.Divider className='border-white'/>
+            <Dropdown.Menu className="bg-dark border border-secondary dropdown-menu-dark">
+                <Dropdown.Item className='text-white text-center' eventKey={0}>All</Dropdown.Item>
+                <Dropdown.Divider className='border-secondary'/>
 
                 {fights.length > 0 ? (
                     fights.map((fight) => (

@@ -142,13 +142,13 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
     return (
 
         <>
-        <Container className="bg-dark border-bottom border-secondary text-white-50" fluid>
+        <Container className="bg-dark border border-secondary text-white-50" fluid>
 
             <Navbar variant="dark" expand="lg">
-                <Container fluid>
-                <Navbar.Brand><h4 className="text-center fw-bold py-1 border-bottom border-secondary">Fight Options</h4></Navbar.Brand>
-                <Navbar.Toggle className="bg-dark" aria-controls="fight-options" />
+                <Container className="justify-content-center" fluid>
+                {/* <Navbar.Brand><h4 className="text-center fw-bold py-1 border-bottom border-secondary">Fight Options</h4></Navbar.Brand> */}
                 
+                <Navbar.Toggle className="bg-dark" aria-controls="fight-options" />
 
                 <Navbar.Collapse className="justify-content-around" id="fight-options">
                     
@@ -157,12 +157,12 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
                     </div>
                     
                     <Dropdown className="pb-1"> 
-                    <Dropdown.Toggle className='fw-bold' as={"text"} role="button" style={{fontSize: "15px"}}>Fight Add/Remove</Dropdown.Toggle>
-                        <Dropdown.Menu className='dropdown-menu-dark bg-dark'>
+                    <Dropdown.Toggle className='fw-bold' as={"div"} role="button" style={{fontSize: "15px"}} id="fightAddRemove">Fight Add/Remove</Dropdown.Toggle>
+                        <Dropdown.Menu className='dropdown-menu-dark bg-dark border border-secondary'>
                             <Dropdown.Item> <FormModalContainer 
                                 triggerText={'Create New Fight'} 
-                                form={ <FightAddForm handleSubmit={handleFightAdd} setFight={setFightToCreate} formId="fightAdd"/>} 
-                                formId="fightAdd" 
+                                form={ <FightAddForm setFight={setFightToCreate} formId="fightAdd"/>}
+                                handleSubmit={handleFightAdd} 
                                 border="success"/> 
                             </Dropdown.Item>
                             <Dropdown.Item>
@@ -176,8 +176,8 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
                     </div>
 
                     <Dropdown className="pb-1">
-                        <Dropdown.Toggle role="button" className='fw-bold' as={"text"} style={{fontSize: "15px"}}>Round Add/Remove</Dropdown.Toggle>
-                        <Dropdown.Menu className='dropdown-menu-dark bg-dark'>
+                        <Dropdown.Toggle role="button" className='fw-bold' as={"div"} style={{fontSize: "15px"}} id="roundAddRemove">Round Add/Remove</Dropdown.Toggle>
+                        <Dropdown.Menu className='dropdown-menu-dark bg-dark border border-secondary'>
                             <Dropdown.Item>
                                 <div variant="dark" size="sm" onClick={createNewRound}>Create Round</div>
                             </Dropdown.Item>
@@ -195,7 +195,7 @@ const FightOptions = ({chars, fight, fights, round, setRound, setFight, fetchFig
         
         </Container>
 
-        <Container className="bg-dark text-white text-center d-flex justify-content-around pt-1" fluid>
+        <Container className="bg-dark border border-secondary text-white-50 text-center d-flex justify-content-around pt-2" fluid>
                 <div className="pb-1 pe-2">
                     <span><h6 className="fw-bold"> Current Fight </h6></span>
                     <span className="fw-bold" style={{color: "#00ced1"}}> {fight.fight_name ? fight.fight_name : "N/A"} </span>

@@ -4,6 +4,7 @@ import { fetchAllFights } from "../utils/db-requests/fight-requests";
 import { fetchAllRounds } from "../utils/db-requests/round-requests";
 import { fetchAllInits } from "../utils/db-requests/init-requests.js";
 import Head from "next/head.js";
+import Script from "next/script.js";
 import { Container } from "react-bootstrap";
 
 
@@ -60,6 +61,7 @@ export default function App({loadedChars, loadedRounds, loadedFights, loadedInit
         <PlayerDashboard loadedChars={loadedChars} loadedRounds={loadedRounds} loadedFights={loadedFights} loadedInitiatives={loadedInitiatives}/>
 
         </Container>
+        
         </>
 
     );

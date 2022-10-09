@@ -2,7 +2,7 @@ import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-export function FormModalContainer({triggerText, form, formId, border}) {
+export function FormModalContainer({triggerText, form, border, handleSubmit}) {
 
     const [show, setShow] = React.useState(false);
 
@@ -13,6 +13,11 @@ export function FormModalContainer({triggerText, form, formId, border}) {
     const closeModal = () => {
         setShow(false); 
     };
+
+    const onSubmit = (event) => {
+        handleSubmit(event);
+        closeModal();
+    }
 
         return (
             <>
@@ -25,7 +30,7 @@ export function FormModalContainer({triggerText, form, formId, border}) {
                 {form}
                 </Modal.Body>
                 <Modal.Footer className={`bg-dark border border-${border}`}>
-                <Button variant="success" type="submit" form={formId} onClick={closeModal}>
+                <Button variant="success" onClick={(e)=> onSubmit(e)}>
                     Save Changes
                 </Button>
                 </Modal.Footer>

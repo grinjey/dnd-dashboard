@@ -19,7 +19,7 @@ const PlayerStatusRow = ({char}) => {
             return <span key={status} className="badge" style={{backgroundColor: statusColors[status], color: statusTextColors[status]}}>{status}</span>
           })
           
-          let newBadgesDiv = <div>{newBadges}</div>
+          let newBadgesDiv = <div className="">{newBadges}</div>
     
           setBadges(newBadgesDiv);
       
@@ -47,7 +47,11 @@ const PlayerStatusRow = ({char}) => {
 
     return (
 
-        <td className="pe-4">{badges ? badges : ''}<CheckboxDropdown label={"Statuses"} showLabel={false} content={statuses} onChange={handleStatuses}></CheckboxDropdown></td>
+        <td className="col-3">{badges ? badges : ''}
+        <span>
+          <CheckboxDropdown label={"Statuses"} showLabel={false} content={statuses} onChange={handleStatuses}></CheckboxDropdown>
+        </span>
+        </td>
 
     )
 
